@@ -1,5 +1,5 @@
 package Transactions;
-
+import User.*;
 public class Payment {
 
     User from;
@@ -8,9 +8,11 @@ public class Payment {
 
     public static Payment createPayment(User from, User to, double amount){
         PaypalInterface paypalInterface = PaypalInterface.getInstance();
+        /*
         if (paypalInterface.makePayment(from.getPaypalUserName(),to.getPayPalUserName(), amount){
             return new Payment(from,to,amount);
         }
+        */
         return null;
     }
 

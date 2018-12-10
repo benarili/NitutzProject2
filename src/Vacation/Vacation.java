@@ -2,7 +2,7 @@ package Vacation;
 
 
 import java.util.Date;
-
+import User.*;
 public class Vacation {
     private String vacationID;
     private User seller;
