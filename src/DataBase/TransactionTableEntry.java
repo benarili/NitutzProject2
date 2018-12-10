@@ -10,7 +10,6 @@ public class TransactionTableEntry extends AdbEntry {
     private double amount;
 
     public TransactionTableEntry(Transaction transaction){
-        this.buyerUserName =
     }
 
     public String getBuyerUserName() {

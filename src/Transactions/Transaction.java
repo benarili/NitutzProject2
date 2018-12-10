@@ -1,9 +1,11 @@
+
 package Transactions;
 
 import DataBase.DataBase;
-import Users.RegisteredUser;
+import User.*;
 
 public class Transaction {
+    /*
 
     private Payment payment;
     private RegisteredUser buyer;
@@ -41,4 +43,6 @@ public class Transaction {
     public Vacation getVacation() {
         return vacation;
     }
+    */
+
 }
