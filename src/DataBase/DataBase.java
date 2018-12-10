@@ -10,7 +10,18 @@ public class DataBase implements IRelationalDB {
     private Connection conn;
 
 
-    public DataBase(String fileName) {
+    private static DataBase instance;
+
+    public void insert(AdbEntry entry){
+        if(entry instanceof )
+    }
+    public static DataBase getInstance(){
+        if (instance==null)
+            instance = new DataBase("projectDB");
+        return instance;
+    }
+
+    private DataBase(String fileName) {
         this.fileName=fileName;
         this.conn = null;
         location = "jdbc:sqlite:" + fileName;
