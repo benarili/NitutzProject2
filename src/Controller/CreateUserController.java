@@ -1,13 +1,12 @@
 package Controller;
 
 
+import DataBase.DataBase;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import main.java.DataBase.DataBase;
-import main.java.Entries.User;
-import main.java.Model.Model;
-import main.java.Model.ModelInit;
+import Model.*;
+
 
 import java.time.format.DateTimeFormatter;
 

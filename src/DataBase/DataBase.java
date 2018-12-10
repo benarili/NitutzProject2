@@ -24,14 +24,15 @@ public class DataBase implements IRelationalDB {
             //String url = "jdbc:sqlite:nituzDB.sqlite";
             // create a connection to the database
             conn = DriverManager.getConnection(location);
-            /*String sql = "CREATE TABLE IF NOT EXISTS warehouses (\n"
-                    + "	user_name text PRIMARY KEY,\n"
+            String sql = "CREATE TABLE IF NOT EXISTS warehouses (\n"
+                    + "	username text PRIMARY KEY,\n"
                     + "	password text NOT NULL,\n"
+                    + "	email text NOT NULL,\n"
                     + "	name text NOT NULL,\n"
                     + "	last_name text NOT NULL,\n"
                     + "	birth_date text NOT NULL,\n"
-                    + "	capacity real\n"
-                    + ");";*/
+                    +"image BLOB, \n"
+                    + ");";
             /*if (conn != null) {
 
                 System.out.println("A new database, " + fileName + ", has been connected to.");
@@ -153,8 +154,9 @@ public class DataBase implements IRelationalDB {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        DataBase db = new DataBase("Resources/Vacation4U_DB.sqlite");
+        DataBase db = new DataBase("Resources/Users.sqlite");
         db.connect();
         db.disConnect();
     }
+
 }
