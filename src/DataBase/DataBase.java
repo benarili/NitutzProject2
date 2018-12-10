@@ -13,7 +13,6 @@ public class DataBase implements IRelationalDB {
     private static DataBase instance;
 
     public void insert(AdbEntry entry){
-        if(entry instanceof )
     }
     public static DataBase getInstance(){
         if (instance==null)
@@ -26,21 +25,63 @@ public class DataBase implements IRelationalDB {
         this.conn = null;
         location = "jdbc:sqlite:" + fileName;
     }
+    public void deleteTable(){
+        try (Connection conn = DriverManager.getConnection(location)) {
+            if (conn != null) {
+                Statement stmt = conn.createStatement();
+                String sqlCommand = "DROP TABLE IF EXISTS 'transactions'" ;
 
-    protected Connection connect() {
+                System.out.println( "output : " + stmt.executeUpdate( sqlCommand ) );
+
+                stmt.close();
+                     // commit after execute sql command
+                //COMMIT TRANSACTION makes all data modifications performed since
+                //the start of the transaction a permanent part of the database,
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createNewDatabase() {
+
+        String url = location;
+
+        try (Connection conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                DatabaseMetaData meta = conn.getMetaData();
+                System.out.println("The driver name is " + meta.getDriverName());
+                System.out.println("A new database has been created.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    protected Connection create() {
 
         conn = null;
         try {
             // db parameters
             //String url = "jdbc:sqlite:nituzDB.sqlite";
             // create a connection to the database
-            String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                    + "	username text PRIMARY KEY,\n"
-                    + "	password text NOT NULL,\n"
-                    + "	email text NOT NULL,\n"
-                    + "	name text NOT NULL,\n"
-                    + "	last_name text NOT NULL,\n"
-                    + "	birth_date text NOT NULL\n"
+            String sql = "CREATE TABLE vacations (\n"
+                    + "	vacationID integer NOT NULL,\n"
+                    + "	seller text NOT NULL,\n"
+                    + "	aviationCompany text NOT NULL,\n"
+                    + "	departureTime real NOT NULL,\n"
+                    + "	launchTime real NOT NULL,\n"
+                    + "	backDepartureTime real,\n"
+                    + "	backLaunchTime real,\n"
+                    + "	baggage integer NOT NULL,\n"
+                    + "	tickets integer NOT NULL,\n"
+                    + "	fromCountry text NOT NULL,\n"
+                    + "	destinationCountry text NOT NULL,\n"
+                    + "	ticketType text NOT NULL,\n"
+                    + "	price text NOT NULL,\n"
+                    + "	avalible integer NOT NULL,\n"
+                    + " PRIMARY KEY (vacationID, seller)"
                     + ");";
             try (Connection conn = DriverManager.getConnection(location);
                  Statement stmt = conn.createStatement()) {
@@ -57,6 +98,17 @@ public class DataBase implements IRelationalDB {
             System.out.println("Connection to " + fileName + " has been established.");
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }
+
+    private Connection connect() {
+        // SQLite connection string
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(location);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return conn;
@@ -79,7 +131,6 @@ public class DataBase implements IRelationalDB {
      */
     public boolean executeInsertCommand(String[] fields,String toExecute){
         boolean success = false;
-        connect();
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(toExecute)) {
             for (int i = 1; i <=fields.length ; i++) {
@@ -101,11 +152,12 @@ public class DataBase implements IRelationalDB {
              ResultSet rs    = stmt.executeQuery(sql)){
             // loop through the result set
             while (rs.next()) {
-                record=rs.getString("Username") +  "\t" +
-                        rs.getString("Password") + "\t" +
-                        rs.getString("Birth_Date") + "\t" +
-                        rs.getString("First_Name") + "\t" +
-                        rs.getString("Last_Name");
+                record=rs.getString("username") +  "\t" +
+                        rs.getString("password") + "\t" +
+                        rs.getString("email") + "\t" +
+                        rs.getString("birth_date") + "\t" +
+                        rs.getString("name") + "\t" +
+                        rs.getString("last_name");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -170,8 +222,14 @@ public class DataBase implements IRelationalDB {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        DataBase db = new DataBase("Users.db");
-        db.connect();
+        DataBase db = new DataBase("Nituz.db");
+        //db.deleteTable();
+        db.create();
+        //db.createNewDatabase( );
+        //db.connect();
+        //String[] fields={"Itzikvais","1234","a@a","Itzik","Vaisman","28/04/93",null};
+        //db.executeInsertCommand( fields,"INSERT INTO users(username,password,email,name,last_name,birth_date,image) VALUES(?,?,?,?,?,?,?)" );
+        //System.out.println(db.executeSelectCommand( "SELECT * FROM users" ));
         db.disConnect();
     }
 
