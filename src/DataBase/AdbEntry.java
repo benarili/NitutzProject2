@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class AdbEntry {
-    private Connection connect() {
+    protected Connection connect() {
         // SQLite connection string
         Connection conn = null;
         try {
@@ -28,7 +28,7 @@ public abstract class AdbEntry {
         }
         return success;
     }
-    public ArrayList<String> selectCommand(String query, String[] wantedColumn, String[] fields){
+    public ArrayList<String> selectCommand(String query, String[] wantedColumn){
         String record = null;
         ArrayList<String> records=new ArrayList<>(  );
         try (Connection conn = this.connect();
@@ -39,6 +39,32 @@ public abstract class AdbEntry {
                 record="";
                 for (int i = 0; i <wantedColumn.length ; i++) {
                     record+=rs.getString( wantedColumn[i] ) + "\t";
+                }
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return records;
+    }
+    public ArrayList<String> selectWhereCommand(String sql, String[] columns,String[] values ) {
+        String record = null;
+        ArrayList<String> records=new ArrayList<>(  );
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            for (int i = 1; i <=values.length ; i++) {
+                pstmt.setString(i,values[i-1]);
+            }
+            //
+            ResultSet rs  = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                record="";
+                for (int i = 0; i <columns.length ; i++) {
+                    record+=rs.getString( columns[i] ) + "\t";
                 }
                 records.add(record);
             }
