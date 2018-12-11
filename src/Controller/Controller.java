@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ButtonType;
@@ -20,9 +21,12 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
+
 import User.*;
 import Model.*;
 public class Controller implements Observer {
+    public javafx.scene.control.Button closeButton;
     public boolean isConnected;
     public User user;
     private Button logout;
@@ -52,6 +56,7 @@ public class Controller implements Observer {
         myVacations.setPrefWidth(250);
         myVacations.setPrefHeight( 50 );
         addVacation=new Button( "add new vacation" );
+        addVacation.setOnAction( e -> addVacation() );
         addVacation.setLayoutX(280);
         addVacation.setLayoutY(170);
         addVacation.setPrefWidth(250);
@@ -60,6 +65,29 @@ public class Controller implements Observer {
         profile.setOnAction( e -> updateUser(  ) );
         profile.setLayoutX(480);
         profile.setLayoutY(20);
+    }
+
+    private void addVacation() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/AddVacation.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality( Modality.APPLICATION_MODAL);
+            stage.initStyle( StageStyle.UNDECORATED);
+            stage.setTitle("Add vacation");
+            AddVacationController view = fxmlLoader.getController();
+            //view.setModel(myModel);
+            stage.setScene(new Scene(root1));
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent windowEvent) {
+                    windowEvent.consume();
+                    stage.close();
+                }
+            });
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void logout() {
@@ -166,6 +194,26 @@ public class Controller implements Observer {
         }
     }
     public void showVacations() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/ShowVacations.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            ShowVacationsController vacationsController=fxmlLoader.getController();
+            Stage stage = new Stage();
+            stage.initModality( Modality.APPLICATION_MODAL);
+            stage.initStyle( StageStyle.UNDECORATED);
+            stage.setTitle("show vacations");
+            vacationsController.setStage(stage,root1);
+            vacationsController.setVacations();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent windowEvent) {
+                    windowEvent.consume();
+                    stage.close();
+                }
+            });
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setUIObjects(Button register, Button login, Parent root,Button vacations) {
@@ -181,5 +229,18 @@ public class Controller implements Observer {
 
     public void setStage(Stage primaryStage) {
         this.primaryStage=primaryStage;
+    }
+
+    public void exit(ActionEvent actionEvent) {
+        showExitMessage();
+    }
+    private void showExitMessage(){
+        Alert exit = myModel.getExitMessage();
+        Optional<ButtonType> result = exit.showAndWait();
+
+    }
+    public void closeButtonAction(ActionEvent actionEvent) {
+        //Stage stage = (Stage) closeButton.getScene().getWindow();
+        primaryStage.close();
     }
 }

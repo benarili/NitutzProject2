@@ -20,9 +20,8 @@ public class Model extends Observable implements ModelInt {
         exit.setTitle("exit");
         exit.setHeaderText("Are you sure you want to exit?");
         ButtonType yes = new ButtonType("yes");
-        ButtonType saveFirst = new ButtonType("yes, but save maze first");
         ButtonType no = new ButtonType("no", ButtonBar.ButtonData.CANCEL_CLOSE);
-        exit.getButtonTypes().setAll(yes,saveFirst,no);
+        exit.getButtonTypes().setAll(yes,no);
         return exit;
     }
 
