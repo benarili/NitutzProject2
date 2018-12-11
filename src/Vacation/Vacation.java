@@ -1,7 +1,14 @@
 package Vacation;
 
 
+import DataBase.TransactionTableEntry;
 import DataBase.VacationTableEntry;
+import User.User;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Vacation {
     private static int incrementID = 0;
@@ -65,6 +72,39 @@ public class Vacation {
         this.ticketType = ticketType;
         this.price = price;
         this.isAvalible = isAvalible != 0;
+    }
+
+    public Vacation(String sellerUserName, int vacationID) {
+        VacationTableEntry vacationTableEntry = new VacationTableEntry();
+        String querry = "SELECT * FROM vacations WHERE  seller = ? AND vacationID = ?;";
+        try (Connection conn = vacationTableEntry.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(querry)){
+            pstmt.setString(1,sellerUserName);
+            pstmt.setInt(2,vacationID);
+            //
+            ResultSet rs  = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                this.vacationID= rs.getInt("vacationID");
+                this.sellerName=rs.getString("seller");
+                this.aviationCompany=rs.getString("aviationCompany");
+                this.departureTime=rs.getLong("departureTime");
+                this.launchTime=rs.getLong("launchTime");
+                this.backDepartureTime=rs.getLong("backDepartureTime");
+                this.backLaunchTime=rs.getLong("backLaunchTime");
+                this.baggage=rs.getInt("baggage");
+                this.tickets=rs.getInt("tickets");
+                this.fromCountry=rs.getString("fromCountry");
+                this.destinationCountry=rs.getString("destinationCountry");
+                this.ticketType=rs.getString("ticketType");
+                this.price=rs.getDouble("price");
+                if(rs.getInt("avalible") == 0) this.isAvalible = false;
+                else this.isAvalible = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /* getters */

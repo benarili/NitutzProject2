@@ -19,10 +19,10 @@ public class VacationTableEntry extends AdbEntry {
             values = new long[1];
             values[0] = departureTime;
         } else {
-            sql = "SELECT * FROM vacations WHERE departureTime > ? AND departureTime < ? AND avalible = 1;";
+            sql = "SELECT * FROM vacations WHERE departureTime > ? AND backLaunchTime < ? AND avalible = 1;";
             values = new long[2];
             values[0] = departureTime;
-            values[0] = backLaunchTime;
+            values[1] = backLaunchTime;
         }
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -88,25 +88,5 @@ public class VacationTableEntry extends AdbEntry {
             System.out.println(e.getMessage());
         }
         return success;
-    }
-
-
-    public static void main(String[] args) {
-        long d1 = 3;
-        long d2 = 4;
-        long d3 = 5;
-        long d4 = 6;
-
-        long d5 = 1;
-        long d6 = 7;
-///
-
-        double p1 = 1000000;
-        Vacation v1 = new Vacation("Liad","El-Al",d1,d2,d3,d4,20,2,"Isrel",
-                "Colombia","adult",p1);
-        VacationTableEntry vacationTableEntry = new VacationTableEntry();
-        ArrayList<Vacation> arrayList = vacationTableEntry.selectByDates(d5,d6);
-        if (arrayList.size() == 0) System.out.println("empty list");
-        else System.out.println(arrayList.get(0).toString());
     }
 }
