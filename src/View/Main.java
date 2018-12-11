@@ -34,7 +34,8 @@ public class Main extends Application {
         addRegister();
         Button register=addRegister();
         Button login =addLogin();
-        Group group= new Group( root,register,login );
+        Button vacations=showVacations();
+        Group group= new Group( root,register,login,vacations );
         Scene scene = new Scene(group, 800, 700);
         scene.getStylesheets().add("/View/MyStyle.css");
         primaryStage.setScene(scene);
@@ -46,7 +47,7 @@ public class Main extends Application {
         view.setStage(primaryStage);
         model.addObserver(view);
         model.setController( view );
-        view.setUIObjects(register,login,root);
+        view.setUIObjects(register,login,root,vacations);
         SetStageCloseEvent(primaryStage);
         primaryStage.show();
     }
@@ -67,6 +68,16 @@ public class Main extends Application {
         register.setLayoutY(20);
         register.setPrefWidth(150);
         return register;
+
+    }
+    private Button showVacations() {
+        Button vacations = new Button("Show vacations");
+        vacations.setOnAction( e -> view.showVacations(  ) );
+        vacations.setLayoutX(280);
+        vacations.setLayoutY(250);
+        vacations.setPrefWidth(250);
+        vacations.setPrefHeight( 50 );
+        return vacations;
 
     }
 

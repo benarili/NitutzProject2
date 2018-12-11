@@ -82,4 +82,25 @@ public abstract class AdbEntry {
         return records;
     }
 
+    /**
+     * updating a generic table where all fields are strings
+     * @param update the sql query
+     * @param newValues the new values
+     */
+    public boolean update(String update, String[] newValues) {
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(update)) {
+
+            // set the corresponding param
+            for (int i = 1; i <=newValues.length ; i++) {
+                pstmt.setString(i, newValues[i-1]);
+            }
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
 }

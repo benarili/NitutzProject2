@@ -44,7 +44,21 @@ public class Model extends Observable implements ModelInt {
         controller.user=user;
         setChanged();
         notifyObservers();
+    }
 
+    @Override
+    public boolean updateUser(User user,String email, String date, String firstName, String lastName) {
+        boolean success=user.updateUser( email,firstName,lastName,date );
+        if(success) {
+            setChanged();
+            notifyObservers();
+        }
+        return success;
+    }
+
+    @Override
+    public boolean updatePassword(User user, String oldPass, String newPass) {
+        return user.updatePW( oldPass,newPass );
     }
 
 }
