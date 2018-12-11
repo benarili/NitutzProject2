@@ -47,6 +47,14 @@ public abstract class AdbEntry {
         }
         return records;
     }
+
+    /**
+     *
+     * @param sql the sql command
+     * @param columns the wanted columns in table
+     * @param values the where values
+     * @return
+     */
     public ArrayList<String> selectWhereCommand(String sql, String[] columns,String[] values ) {
         String record = null;
         ArrayList<String> records=new ArrayList<>(  );

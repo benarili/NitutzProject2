@@ -4,14 +4,32 @@ import DataBase.*;
 import java.util.ArrayList;
 
 public class User {
-    private String username;
-    private String pass;
-    private String email;
-    private String name;
-    private String lastname;
-    private String birthDath;
+    private String username="";
+    private String pass="";
+    private String email="";
+    private String name="";
+    private String lastname="";
+    private String birthDath="";
     private dbTableUsers db=new dbTableUsers();
-
+    String[] columns={"username","password","email","name","last_name","birth_date"};
+    public User(String userName,String password){
+        String[] values= {userName,password};
+        ArrayList<String> user=db.selectWhereCommand( "SELECT username,password,email,name,last_name,birth_date,image FROM users WHERE username= ? AND password=?",columns,values );
+        String selectedUser;
+        if(user.size()>=1){
+            selectedUser=user.get( 0 );
+            addValues(selectedUser);
+        }
+    }
+    public User(String userName){
+        String[] values={userName};
+        ArrayList<String> user=db.selectWhereCommand( "SELECT username,password,email,name,last_name,birth_date,image FROM users WHERE username= ?",columns,values);
+        String selectedUser;
+        if(user.size()>=1){
+            selectedUser=user.get( 0 );
+            addValues(selectedUser);
+        }
+    }
     public User(String username, String pass, String email, String name, String lastname, String birthDath) {
         this.username = username;
         this.pass = pass;
@@ -20,11 +38,56 @@ public class User {
         this.lastname = lastname;
         this.birthDath = birthDath;
     }
+
+    /**
+     * @return the user username
+     */
+    public String getUsername() {
+        return username;
+    }
+    /**
+     * @return the user password
+     */
+    public String getPass() {
+        return pass;
+    }
+    /**
+     * @return the user email
+     */
+    public String getEmail() {
+        return email;
+    }
+    /**
+     * @return the user first name
+     */
+    public String getName() {
+        return name;
+    }
+
+    private void addValues(String selectedUser) {
+        String[] values=selectedUser.split( "\t" );
+        username=values[0];
+        pass=values[1];
+        email=values[2];
+        name=values[3];
+        lastname=values[4];
+        birthDath=values[5];
+    }
+
+
+
     public boolean createNewUser(){
         String[] insert={username,pass,email,name,lastname,birthDath};
-        return db.InsertComand( "INSERT INTO users(username,password,email,name,last_name,birth_date,image) VALUES(?,?,?,?,?,?,?)",insert );
+        return db.InsertComand( "INSERT INTO users(username,password,email,name,last_name,birth_date) VALUES(?,?,?,?,?,?)",insert );
     }
     public ArrayList<String> selectUser(String query, String[] fields){
         return db.selectCommand( query,fields );
+    }
+
+    /**
+     * check if all user fields are ok
+     */
+    public boolean checkUser(){
+        return username.length()>=1&&pass.length()>=1&&email.length()>=1&&name.length()>=1&&lastname.length()>=1&&birthDath.length()>=1;
     }
 }
