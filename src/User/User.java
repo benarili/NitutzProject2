@@ -1,5 +1,6 @@
 package User;
 import DataBase.*;
+import Mail.Mailbox;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class User {
     private String lastname="";
     private String birthDate="";
     private dbTableUsers db=new dbTableUsers();
+    private Mailbox mailbox;
     String[] columns={"username","password","email","name","last_name","birth_date"};
     public User(String userName,String password){
         String[] values= {userName,password};
@@ -37,6 +39,7 @@ public class User {
         this.name = name;
         this.lastname = lastname;
         this.birthDate = birthDath;
+        this.mailbox = new Mailbox(this);
     }
 
     /**
@@ -119,4 +122,6 @@ public class User {
         }
         return false;
     }
+
+    public Mailbox getMailbox(){return this.mailbox;}
 }
