@@ -171,9 +171,12 @@ public class Vacation {
 
     public void setAvalible(boolean avalible) {
         isAvalible = avalible;
-        // NEED TO UPDATE IN DB!!!!
+        //UPDATE IN DB!!!!
+        VacationTableEntry vacationTableEntry = new VacationTableEntry();
+        int boolInt = 0;
+        if(avalible) boolInt = 1;
+        vacationTableEntry.updateAvalible(getVacationID(),boolInt);
     }
-//ddsdd
     @Override
     public String toString() {
         return "vacationID: "+vacationID+"seller: "+sellerName+"departureTime: " +departureTime

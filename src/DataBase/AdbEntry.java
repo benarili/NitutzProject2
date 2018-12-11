@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class AdbEntry {
-    protected Connection connect() {
+    public Connection connect() {
         // SQLite connection string
         Connection conn = null;
         try {

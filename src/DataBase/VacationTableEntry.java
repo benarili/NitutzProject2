@@ -57,7 +57,6 @@ public class VacationTableEntry extends AdbEntry {
         }
         return vacationsArrayList;
     }
-
     public boolean InsertComand(Vacation vacationToDB) {
         boolean success = false;
         String sqlCommand = "INSERT INTO vacations(vacationID,seller,aviationCompany,departureTime,launchTime," +
@@ -88,5 +87,84 @@ public class VacationTableEntry extends AdbEntry {
             System.out.println(e.getMessage());
         }
         return success;
+    }
+    public boolean updateAvalible(int vacID, int update) {
+        String sqlCommand = "UPDATE vacations SET avalible = ? WHERE vacationID = ? ORDER BY departureTime;";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sqlCommand)) {
+            pstmt.setInt(1,update);
+            pstmt.setInt(2,vacID);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    public ArrayList<Vacation> getAllAvalibleVacations(){
+        ArrayList<Vacation>  res = new ArrayList<Vacation>();
+        String sql;
+        sql = "SELECT * FROM vacations WHERE avalible = 1;";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // set the value
+            ResultSet rs = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                Vacation currRecord = new Vacation(rs.getInt("vacationID"),
+                        rs.getString("seller"),
+                        rs.getString("aviationCompany"),
+                        rs.getLong("departureTime"),
+                        rs.getLong("launchTime"),
+                        rs.getLong("backDepartureTime"),
+                        rs.getLong("backLaunchTime"),
+                        rs.getInt("baggage"),
+                        rs.getInt("tickets"),
+                        rs.getString("fromCountry"),
+                        rs.getString("destinationCountry"),
+                        rs.getString("ticketType"),
+                        rs.getDouble("price"),
+                        rs.getInt("avalible"));
+                res.add(currRecord);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+    public ArrayList<Vacation> getMyVacations(String userName){
+        ArrayList<Vacation>  res = new ArrayList<Vacation>();
+        String sql;
+        sql = "SELECT * FROM vacations WHERE avalible = 1 AND seller = ?;";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1,userName);
+            // set the value
+            ResultSet rs = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                Vacation currRecord = new Vacation(rs.getInt("vacationID"),
+                        rs.getString("seller"),
+                        rs.getString("aviationCompany"),
+                        rs.getLong("departureTime"),
+                        rs.getLong("launchTime"),
+                        rs.getLong("backDepartureTime"),
+                        rs.getLong("backLaunchTime"),
+                        rs.getInt("baggage"),
+                        rs.getInt("tickets"),
+                        rs.getString("fromCountry"),
+                        rs.getString("destinationCountry"),
+                        rs.getString("ticketType"),
+                        rs.getDouble("price"),
+                        rs.getInt("avalible"));
+                res.add(currRecord);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
     }
 }
