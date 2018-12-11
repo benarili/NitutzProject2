@@ -99,7 +99,7 @@ public class VacationTableEntry extends AdbEntry {
 
         long d5 = 1;
         long d6 = 7;
-//
+///
 
         double p1 = 1000000;
         Vacation v1 = new Vacation("Liad","El-Al",d1,d2,d3,d4,20,2,"Isrel",
