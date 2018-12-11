@@ -13,6 +13,10 @@ Label{
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
+Group{
+    -fx-border-color: black;
+    -fx-border-style: solid;
+}
 Button:hover{
     -fx-background-color: lightblue;
     -fx-border-color: black;

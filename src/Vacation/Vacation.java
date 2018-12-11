@@ -179,7 +179,7 @@ public class Vacation {
     }
     @Override
     public String toString() {
-        return "vacationID: "+vacationID+"seller: "+sellerName+"departureTime: " +departureTime
-                + "launchTime: " + launchTime+ "backDepartureTime: "+backDepartureTime+"backLaunchTime: "+backLaunchTime;
+        return "seller: "+sellerName+"  country of origin: " + fromCountry+ "  country destination: "+destinationCountry+ "  price: " + price +"\ndepartureTime: " +departureTime
+                + "  launchTime: " + launchTime+ "  backDepartureTime: "+backDepartureTime+"  backLaunchTime: "+backLaunchTime ;
     }
 }

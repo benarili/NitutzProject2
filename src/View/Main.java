@@ -41,6 +41,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Vacation4U");
         primaryStage.setScene(scene);
+
         view = fxmlLoader.getController();
         view.setResizeEvent(scene);
         view.setModel(model);
@@ -85,6 +86,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent windowEvent) {
                 windowEvent.consume();
+                primaryStage.close();
             }
         });
     }
