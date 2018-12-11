@@ -133,7 +133,7 @@ public class Vacation {
         isAvalible = avalible;
         // NEED TO UPDATE IN DB!!!!
     }
-
+//ddsd
     @Override
     public String toString() {
         return "vacationID: "+vacationID+"seller: "+sellerName+"departureTime: " +departureTime
