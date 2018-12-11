@@ -28,4 +28,17 @@ public interface ModelInt {
      * @param user the logged user
      */
     public void loginSucces(User user);
+
+    /**
+     * update user information
+     * @param user
+     * @param email
+     * @param date
+     * @param firstName
+     * @param lastName
+     * @return
+     */
+    boolean updateUser(User user,String email, String date, String firstName, String lastName);
+
+    boolean updatePassword(User user, String oldPass, String newPass);
 }
