@@ -10,5 +10,19 @@
         <property name="enable_load_extension" value="true" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="Nituz" uuid="4a6c4810-ea4d-4187-a49b-7a57cb98d106">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\tsizer\Documents\לימודים\שנה ג\סמסטר א\ניתוצ\מטלות\פרוייקט\NitutzProject2\Nituz.db</jdbc-url>
+      <driver-properties>
+        <property name="enable_load_extension" value="true" />
+      </driver-properties>
+      <libraries>
+        <library>
+          <url>file://$USER_HOME$/IdeaProjects/nituzProject/sqlite-jdbc-3.23.1.jar</url>
+        </library>
+      </libraries>
+    </data-source>
   </component>
 </project>

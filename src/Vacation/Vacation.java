@@ -1,17 +1,18 @@
 package Vacation;
 
 
-import java.util.Date;
-import User.*;
+import DataBase.VacationTableEntry;
+
 public class Vacation {
-    private String vacationID;
-    private User seller;
+    private static int incrementID = 0;
+    private int vacationID;
+    private String sellerName;
     private String aviationCompany;
 
-    private Date departureTime;
-    private Date launchTime;
-    private Date backDepartureTime;
-    private Date backLaunchTime;
+    private long departureTime;
+    private long launchTime;
+    private long backDepartureTime;
+    private long backLaunchTime;
 
     private int baggage;
     private int tickets;
@@ -22,10 +23,11 @@ public class Vacation {
 
     private boolean isAvalible;
 
-    public Vacation(User seller, String aviationCompany, Date departureTime, Date launchTime,
-                    Date backDepartureTime, Date backLaunchTime, int baggage, int tickets,
+    public Vacation(String sellerName, String aviationCompany, long departureTime, long launchTime,
+                    long backDepartureTime, long backLaunchTime, int baggage, int tickets,
                     String fromCountry, String destinationCountry, String ticketType, double price) {
-        this.seller = seller;
+        this.vacationID = ++incrementID;
+        this.sellerName = sellerName;
         this.aviationCompany = aviationCompany;
         this.departureTime = departureTime;
         this.launchTime = launchTime;
@@ -40,41 +42,57 @@ public class Vacation {
         isAvalible = true;
 
         //add to dataBase
-        long departureTimeForSQL = departureTime.getTime()/1000;
-        long launchTimeForSQL = launchTime.getTime()/1000;
-        if (backDepartureTime != null && backLaunchTime != null ){
-            long backDepartureTimeForSQL = backDepartureTime.getTime()/1000;
-            long backLaunchTimeForSQL = backLaunchTime.getTime()/1000;
-        }
+        VacationTableEntry vte = new VacationTableEntry();
+        vte.InsertComand(this);
+    }
+    public Vacation(int vacationID, String sellerName, String aviationCompany, long departureTime, long launchTime,
+                    long backDepartureTime, long backLaunchTime, int baggage, int tickets,
+                    String fromCountry, String destinationCountry, String ticketType, double price, int isAvalible){
+        //create object from record in DB
+        // NO NEED TO ADD TO DB!
 
+        this.vacationID = vacationID;
+        this.sellerName = sellerName;
+        this.aviationCompany = aviationCompany;
+        this.departureTime = departureTime;
+        this.launchTime = launchTime;
+        this.backDepartureTime = backDepartureTime;
+        this.backLaunchTime = backLaunchTime;
+        this.baggage = baggage;
+        this.tickets = tickets;
+        this.fromCountry = fromCountry;
+        this.destinationCountry = destinationCountry;
+        this.ticketType = ticketType;
+        this.price = price;
+        this.isAvalible = isAvalible != 0;
     }
 
     /* getters */
-    public String getVacationID() {
+    public int getVacationID() {
         return vacationID;
     }
 
-    public User getSeller() {
-        return seller;
+    public String getSeller() {
+        return sellerName;
     }
 
     public String getAviationCompany() {
         return aviationCompany;
     }
 
-    public Date getDepartureTime() {
+    public long getDepartureTime() {
         return departureTime;
     }
 
-    public Date getLaunchTime() {
+    public long getLaunchTime() {
         return launchTime;
     }
 
-    public Date getBackDepartureTime() {
+    public long getBackDepartureTime() {
         return backDepartureTime;
     }
 
-    public Date getBackLaunchTime() {
+    public long getBackLaunchTime() {
         return backLaunchTime;
     }
 
@@ -113,7 +131,12 @@ public class Vacation {
 
     public void setAvalible(boolean avalible) {
         isAvalible = avalible;
+        // NEED TO UPDATE IN DB!!!!
     }
 
-
+    @Override
+    public String toString() {
+        return "vacationID: "+vacationID+"seller: "+sellerName+"departureTime: " +departureTime
+                + "launchTime: " + launchTime+ "backDepartureTime: "+backDepartureTime+"backLaunchTime: "+backLaunchTime;
+    }
 }
