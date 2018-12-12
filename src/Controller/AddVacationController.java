@@ -32,6 +32,9 @@ public class AddVacationController {
         stage.close();
     }
 
+    public void setUser(User user){
+        this.user=user;
+    }
     public void addVacation(ActionEvent actionEvent) {
         String username=user.getUsername();
         String aviationComp=aviation.getText();
@@ -59,6 +62,7 @@ public class AddVacationController {
             Alert result=new Alert( Alert.AlertType.WARNING );
             result.setTitle( "wrong inputs" );
             result.setContentText( "one or more of your inputs are incorect" );
+            result.showAndWait();
         }
         else{
             Vacation vac= new Vacation( username,aviationComp,Date.valueOf( departureTime ),Date.valueOf( launTime ),Date.valueOf(backDepartureTime),Date.valueOf(backLaunch),Integer.parseInt( bag ),Integer.parseInt( ticket ),source,destination,type,Double.parseDouble( amount ) );

@@ -182,9 +182,6 @@ public class Vacation implements Comparable<Vacation> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("VacationID: ");
-        sb.append(vacationID);
-        sb.append(", ");
         sb.append("seller: ");
         sb.append(sellerName);
         sb.append(", ");
@@ -196,13 +193,13 @@ public class Vacation implements Comparable<Vacation> {
         sb.append(",  ");
         sb.append("price: ");
         sb.append(price);
-        sb.append(", ");
+        sb.append("\n");
         sb.append("departureTime: ");
         sb.append(departureTime.toString());
         sb.append(", ");
         sb.append("launchTime: ");
         sb.append(launchTime.toString());
-        sb.append(", ");
+        sb.append("\n");
         if (backDepartureTime != null) {
             sb.append("backDepartureTime: ");
             sb.append(backDepartureTime.toString());
@@ -211,7 +208,6 @@ public class Vacation implements Comparable<Vacation> {
         if (backLaunchTime != null) {
             sb.append("backLaunchTime: ");
             sb.append(backLaunchTime.toString());
-            sb.append(", ");
         }
         return sb.toString();
     }

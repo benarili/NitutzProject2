@@ -118,7 +118,7 @@ public class VacationTableEntry extends AdbEntry {
     public ArrayList<Vacation> getAllAvailableVacations(){
         ArrayList<Vacation>  res = new ArrayList<Vacation>();
         String sql;
-        sql = "SELECT * FROM vacations WHERE available = 1;";
+        sql = "SELECT * FROM vacations WHERE avalible = 1;";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

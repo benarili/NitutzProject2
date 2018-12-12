@@ -51,6 +51,7 @@ public class Controller implements Observer {
         logout.setLayoutY(20);
         logout.setPrefWidth(150);
         myVacations=new Button( "my vacations" );
+        myVacations.setOnAction( e->myVacations() );
         myVacations.setLayoutX(280);
         myVacations.setLayoutY(330);
         myVacations.setPrefWidth(250);
@@ -67,6 +68,30 @@ public class Controller implements Observer {
         profile.setLayoutY(20);
     }
 
+    private void myVacations() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/MyVacation.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            MyVacationsController vacationsController=fxmlLoader.getController();
+            Stage stage = new Stage();
+            stage.initModality( Modality.APPLICATION_MODAL);
+            stage.initStyle( StageStyle.UNDECORATED);
+            stage.setTitle("my vacations");
+            vacationsController.setStage(stage,root1);
+            vacationsController.setVacations(user.getUsername());
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent windowEvent) {
+                    windowEvent.consume();
+                    stage.close();
+                }
+            });
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void addVacation() {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/AddVacation.fxml"));
@@ -76,6 +101,7 @@ public class Controller implements Observer {
             stage.initStyle( StageStyle.UNDECORATED);
             stage.setTitle("Add vacation");
             AddVacationController view = fxmlLoader.getController();
+            view.setUser( user );
             //view.setModel(myModel);
             stage.setScene(new Scene(root1));
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -198,6 +224,8 @@ public class Controller implements Observer {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/ShowVacations.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             ShowVacationsController vacationsController=fxmlLoader.getController();
+            if(isConnected)
+                vacationsController.setUser(user);
             Stage stage = new Stage();
             stage.initModality( Modality.APPLICATION_MODAL);
             stage.initStyle( StageStyle.UNDECORATED);
