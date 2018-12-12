@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.*;
 import User.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -54,17 +55,19 @@ public class AddVacationController {
         String type=ticketType.getText();
         String amount=price.getText();
         if(aviationComp.length()<1||departureTime.length()<1||launTime.length()<1||bag.length()<1||ticket.length()<1||source.length()<1||destination.length()<1
-        ||type.length()<1||amount.length()<1||!isInteger( bag )||!isInteger( ticket )||!isIDouble( amount )){
+        ||type.length()<1||amount.length()<1||!isInteger( bag )||!isInteger( ticket )||!isIDouble( amount )||backDepartureTime.length()<1||backLaunch.length()<1){
             Alert result=new Alert( Alert.AlertType.WARNING );
             result.setTitle( "wrong inputs" );
             result.setContentText( "one or more of your inputs are incorect" );
         }
         else{
+            Vacation vac= new Vacation( username,aviationComp,Date.valueOf( departureTime ),Date.valueOf( launTime ),Date.valueOf(backDepartureTime),Date.valueOf(backLaunch),Integer.parseInt( bag ),Integer.parseInt( ticket ),source,destination,type,Double.parseDouble( amount ) );
+            Alert alert=new Alert( Alert.AlertType.INFORMATION );
+            alert.setContentText( "Vacation added succesfuly" );
+            alert.showAndWait();
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
         }
-
-
-
-
     }
     private boolean isInteger(String num){
         try{

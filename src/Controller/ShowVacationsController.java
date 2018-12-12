@@ -6,6 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import DataBase.*;
@@ -73,17 +76,19 @@ public class ShowVacationsController {
         Button contact = new Button("contact seller");
         parameters.setLayoutX(40);
         parameters.setLayoutY( height );
+        parameters.setPrefWidth( 1000 );
         height+=60;
         vacations.setLayoutX( 40 );
         vacations.setLayoutY( height );
         contact.setLayoutX( 200 );
         contact.setLayoutY( height );
         height+=60;
+        HBox hb= new HBox( parameters,vacations,contact );
         if(group==null){
-            group=new Group(root, parameters,vacations,contact );
+            group=new Group(root, hb );
         }
         else
-            group=new Group( group,parameters,vacations,contact );
+            group=new Group( group,hb );
         group.getStylesheets().add("/View/MyStyle.css");
 
     }
