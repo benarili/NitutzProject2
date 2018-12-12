@@ -24,21 +24,21 @@ public class TransactionTableEntry extends AdbEntry {
         buyerUserName = transaction.getBuyer().getUsername();
         sellerUserName = transaction.getSeller().getUsername();
         vacationID = transaction.getVacation().getVacationID();
-        time = transaction.getDateUnixTime();
+        //time = transaction.getDateUnixTime();
     }
 
     public boolean insert(Transaction transaction){
         String sBuyerUserName = transaction.getBuyer().getUsername();
         String sSellerUserName = transaction.getSeller().getUsername();
         int iVacationID = transaction.getVacation().getVacationID();
-        long lTime = transaction.getDateUnixTime();
+        java.sql.Date time = java.sql.Date.valueOf(transaction.getTime());
         String insertCommand = "INSERT INTO transactions(buyerUserName,sellerUserName,vacationID,time) VALUES(?,?,?,?)";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(insertCommand)) {
              pstmt.setString(1,sBuyerUserName);
              pstmt.setString(2,sSellerUserName);
              pstmt.setInt(3,iVacationID);
-             pstmt.setLong(4,lTime);
+             pstmt.setDate(4,time);
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {

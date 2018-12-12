@@ -9,8 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import Transactions.Payment;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Transaction {
 
@@ -18,12 +18,12 @@ public class Transaction {
     private Payment payment;
     private User buyer;
     private User seller;
-    Vacation vacation;
-    long dateUnixTime;
-    boolean isInDB = false;
+    private Vacation vacation;
+    private LocalDate time;
+    private boolean isInDB = false;
 
     public static Transaction createTransaction(User buyer, User seller, Vacation vacation){
-        Payment payment = Payment.createPayment("hi","hello",vacation.getPrice());
+        Payment payment = Payment.createPayment("thisis","asimlulation",vacation.getPrice());
         if(payment==null)
             return null;
         Transaction transaction = new Transaction(buyer,seller,vacation,payment);
@@ -31,12 +31,23 @@ public class Transaction {
         return transaction;
     }
 
+    public Transaction(User buyer, User seller, Vacation vacation, LocalDate time, boolean isInDB) {
+        this.buyer = buyer;
+        this.seller = seller;
+        this.vacation = vacation;
+        this.time = time;
+        this.isInDB = isInDB;
+    }
+
     private Transaction(User buyer, User seller, Vacation vacation, Payment payment){
         this.buyer=buyer;
         this.seller=seller;
         this.vacation=vacation;
         this.payment = payment;
-        dateUnixTime = new Date().getTime();
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        time = LocalDate.now();
+        System.out.println(time);
+
     }
 
     public void addToDataBase(){
@@ -71,7 +82,7 @@ public class Transaction {
                 this.vacation = new Vacation(sellerUserName,vacationID);
                 this.seller = new User(sellerUserName);
                 this.buyer = new User(buyerUserName);
-                this.dateUnixTime = rs.getLong(4);
+                //this.dateUnixTime = rs.getLong(4);
                 this.isInDB=true;
             }
         } catch (SQLException e) {
@@ -91,9 +102,12 @@ public class Transaction {
         return vacation;
     }
 
-    public long getDateUnixTime(){return dateUnixTime;}
+   public LocalDate getTime(){return time;}
 
     public String toString(){
         return "Transaction: "+this.buyer.getUsername()+" bought vacation:"+this.vacation.getVacationID()+" from "+this.seller.getUsername();
     }
+
+
+    public boolean isInDB(){return isInDB;}
 }

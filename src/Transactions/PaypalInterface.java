@@ -15,9 +15,7 @@ public class PaypalInterface {
     }
 
     public boolean makePayment(String userNameFrom, String userNameTo, double amount){
-        if(userNameFrom!=null && userNameTo!=null && userNameFrom.length()>0 && userNameTo.length()>0)
-            return true;
-        return false;
+        return true;
     }
 
 }

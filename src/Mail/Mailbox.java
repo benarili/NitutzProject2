@@ -1,40 +1,57 @@
 package Mail;
 
+import DataBase.dbMessages;
 import Transactions.Transaction;
 import User.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Mailbox {
 
-    private User owner;
+    private String owner;
     private List<Message> messages;
 
     public Mailbox(User owner){
-        this.owner=owner;
+        this.owner=owner.getUsername();
+        this.messages = new ArrayList<>();
     }
 
     public List<Message> getMessages(){return messages;}
 
-    public void sendMessage(User userOther,String messageText){
-        Mailbox mailboxOther = userOther.getMailbox();
-        Message toSend = new Message(messageText,owner,userOther);
-        mailboxOther.addMessage(toSend);
+    public void sendMessage(String userOtherName,String messageText){
+        Message toSend = new Message();
+        toSend.setText(messageText);
+        sendMessage(toSend,userOtherName);
     }
 
-    public void sendConfirmationMessage(User userOther, Transaction toConfirm){
-        Mailbox mailboxOther = userOther.getMailbox();
-        MessagerequestToConfirm messagerequestToConfirm = new MessagerequestToConfirm(owner,userOther,toConfirm,confirmationAction);
-        mailboxOther.addMessage(messagerequestToConfirm);
+    public void sendMessage(Message toSend,String otherUserName){
+        Mailbox mailboxOther = new User(otherUserName).getMailbox();
+        toSend.setUserNameFrom(owner);
+        toSend.setUserNameTo(otherUserName);
+        mailboxOther.addMessage(toSend);
+        toSend.addToDataBase();
     }
+
 
     private void addMessage(Message message){
         this.messages.add(0,message);
     }
 
-    private static Message createFromEntry()
+    //private static Message createFromEntry()
+
+    public static Mailbox recreateMailBox (User user){
+        Mailbox mailbox = new Mailbox(user);
+        dbMessages db = new dbMessages();
+        mailbox.messages=db.getAllReceived(user.getUsername());
+        return mailbox;
+    }
+
+    public String getOwnerUserName(){return owner;}
 
 
-
+    void removeMessage(Message message){
+        messages.remove(message);
+    }
 }
