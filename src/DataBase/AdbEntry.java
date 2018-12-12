@@ -47,6 +47,22 @@ public abstract class AdbEntry {
         }
         return records;
     }
+    public int selectIntCommand(String wantedColumn){
+        String query="SELECT vacationID,messageID FROM ids";
+        String record = "";
+        ArrayList<String> records=new ArrayList<>(  );
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            // loop through the result set
+            while (rs.next()) {
+                record=rs.getInt( wantedColumn ) + "\t";
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return Integer.parseInt(record);
+    }
 
     /**
      *
@@ -95,6 +111,19 @@ public abstract class AdbEntry {
             for (int i = 1; i <=newValues.length ; i++) {
                 pstmt.setString(i, newValues[i-1]);
             }
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    public boolean updateInt(String update, int newValue) {
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(update)) {
+
+            // set the corresponding param
+            pstmt.setInt(1, newValue);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e) {

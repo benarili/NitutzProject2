@@ -66,14 +66,10 @@ public class DataBase implements IRelationalDB {
             // db parameters
             //String url = "jdbc:sqlite:nituzDB.sqlite";
             // create a connection to the database
-            String sql = "CREATE TABLE messages (\n"
-                    + "	userFrom text NOT NULL,\n"
-                    + "	userTo text NOT NULL,\n"
-                    + "	messageText text NOT NULL,\n"
-                    + "	messageType text NOT NULL,\n"
-                    + "	messageId integer NOT NULL,\n"
-                    + " isRead integer NOT NULL,\n"
-                    + " PRIMARY KEY (userFrom, userTo, messageText, messageId)"
+            String sql = "CREATE TABLE ids (\n"
+                    + "	vacationID INTEGER NOT NULL,\n"
+                    + "	messageID INTEGER NOT NULL, \n"
+                    + " PRIMARY KEY (vacationID,messageID)"
                     + ");";
             try (Connection conn = DriverManager.getConnection(location);
                  Statement stmt = conn.createStatement()) {
