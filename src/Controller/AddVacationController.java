@@ -9,6 +9,7 @@ import User.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class AddVacationController {
 
@@ -54,12 +55,13 @@ public class AddVacationController {
         String type=ticketType.getText();
         String amount=price.getText();
         if(aviationComp.length()<1||departureTime.length()<1||launTime.length()<1||bag.length()<1||ticket.length()<1||source.length()<1||destination.length()<1
-        ||type.length()<1||amount.length()<1||!isInteger( bag )||!isInteger( ticket )||!isIDouble( amount )){
+        ||type.length()<1||amount.length()<1||!isInteger( bag )||!isInteger( ticket )||!isIDouble( amount )||backDepartureTime.length()<1||backLaunch.length()<1){
             Alert result=new Alert( Alert.AlertType.WARNING );
             result.setTitle( "wrong inputs" );
             result.setContentText( "one or more of your inputs are incorect" );
         }
         else{
+            Vacation vac= new Vacation( username,aviationComp, )
         }
 
 

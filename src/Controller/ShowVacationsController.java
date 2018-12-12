@@ -48,6 +48,7 @@ public class ShowVacationsController {
         Button contact = new Button("contact seller");
         parameters.setLayoutX(40);
         parameters.setLayoutY( height );
+        parameters.setPrefWidth( 1000 );
         height+=60;
         vacations.setLayoutX( 40 );
         vacations.setLayoutY( height );
