@@ -24,6 +24,7 @@ public class MailboxController {
     private Parent root;
     private Group group=null;
     private int height=70;
+    private Parent p;
 
     public Stage getStage() {
         return stage;
@@ -35,25 +36,42 @@ public class MailboxController {
     private Mailbox mailbox;
     private String userName;
 
-    public MailboxController(String userName){
+    public MailboxController(){
+        //this.userName = userName;
+    }
+
+    public void setUserName(String userName){
         this.userName = userName;
-        mailbox = Mailbox.recreateMailBox(new User(userName));
-        setMessages(mailbox.getMessages());
     }
 
     public void closeButtonAction(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
-
+    public void setMessages(){
+        mailbox = Mailbox.recreateMailBox(new User(userName));
+        setMessages(mailbox.getMessages());
+    }
     public void setMessages(Collection<Message> messages){
+        if(p==null && (messages==null || messages.isEmpty()))
+            return;
         for (Message m:messages) {
             addMessage(m);
         }
-        Scene scene=new Scene( group );
+        Scene scene;
+        if(group!=null) {
+            group = new Group(p, group);
+            scene = new Scene(group);
+        }
+        else {
+            group=new Group(p);
+            scene = new Scene(group);
+        }
         stage.setScene( scene );
     }
-
+    public void setParent(Parent p){
+        this.p=p;
+    }
     private void addMessage(Message m) {
         javafx.scene.control.Label parameters=new javafx.scene.control.Label( m.getText() );
         javafx.scene.control.Button accept = new javafx.scene.control.Button("Accept Purchase");
@@ -70,14 +88,14 @@ public class MailboxController {
         deny.setLayoutY( height );
         height+=60;
         HBox hb;
-        if(m instanceof MessageRequestToConfirm){
+        if(m instanceof MessageRequestToConfirm && (((MessageRequestToConfirm) m).haveResponded())){
             hb= new HBox( parameters,accept,deny );
         }
         else {
             hb= new HBox( parameters);
         }
         if(group==null){
-            group=new Group(root, hb );
+            group=new Group( hb );
         }
         else
             group=new Group( group,hb );
@@ -94,4 +112,7 @@ public class MailboxController {
         setMessages(mailbox.getMessages());
     }
 
+    public void setStage(Stage stage) {
+        this.stage=stage;
+    }
 }

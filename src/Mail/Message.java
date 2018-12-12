@@ -13,23 +13,24 @@ public class Message {
     protected String text;
     private String userNameFrom;
     private String userNameTo;
-    private static int idCounter = 0;
     private int id;
 
 
     protected Message(String from, String to){
         this.userNameFrom = from;
         this.userNameTo = to;
-        this.id = idCounter;
-        idCounter++;
+        dbMessages mdb = new dbMessages();
+        this.id = mdb.selectIntCommand("messageID");
+        mdb.updateInt("UPDATE ids SET vacationID = ?",id+1);
     }
 
     Message(int id){
         this.id=id;
     }
     Message(){
-        this.id = idCounter;
-        idCounter++;
+        dbMessages mdb = new dbMessages();
+        this.id = mdb.selectIntCommand("messageID");
+        mdb.updateInt("UPDATE ids SET messageID = ?",id+1);
     }
 
 

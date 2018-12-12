@@ -6,7 +6,6 @@ import DataBase.VacationTableEntry;
 import java.sql.*;
 
 public class Vacation implements Comparable<Vacation> {
-    private static int incrementID = 0;
     private int vacationID;
     private String sellerName;
     private String aviationCompany;
@@ -28,7 +27,9 @@ public class Vacation implements Comparable<Vacation> {
     public Vacation(String sellerName, String aviationCompany, Date departureTime, Date launchTime,
                     Date backDepartureTime, Date backLaunchTime, int baggage, int tickets,
                     String fromCountry, String destinationCountry, String ticketType, double price) {
-        this.vacationID = ++incrementID;
+        VacationTableEntry vte = new VacationTableEntry();
+        this.vacationID = vte.selectIntCommand("vacationID");
+        vte.updateInt("UPDATE ids SET vacationID = ?",vacationID+1);
         this.sellerName = sellerName;
         this.aviationCompany = aviationCompany;
         this.departureTime = departureTime;
@@ -44,7 +45,6 @@ public class Vacation implements Comparable<Vacation> {
         isAvalible = true;
 
         //add to dataBase
-        VacationTableEntry vte = new VacationTableEntry();
         vte.InsertCommand(this);
     }
     public Vacation(int vacationID, String sellerName, String aviationCompany, Date departureTime, Date launchTime,
@@ -76,16 +76,14 @@ public class Vacation implements Comparable<Vacation> {
      */
     public Vacation(String sellerUserName, int vacationID) {
         VacationTableEntry vacationTableEntry = new VacationTableEntry();
-        String querry = "SELECT * FROM vacations WHERE  seller = ? AND vacationID = ?;";
+        String querry = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE  seller = ? AND vacationID = ?;";
         try (Connection conn = vacationTableEntry.connect();
              PreparedStatement pstmt  = conn.prepareStatement(querry)){
             pstmt.setString(1,sellerUserName);
             pstmt.setInt(2,vacationID);
             //
             ResultSet rs  = pstmt.executeQuery();
-            if(rs.first()) {
-                System.out.println("Vacation ID: " + vacationID + " from seller: " + sellerUserName + " doesn't exist in DB");
-            }
+
             // loop through the result set
             while (rs.next()) {
                 this.vacationID= rs.getInt("vacationID");
@@ -216,4 +214,6 @@ public class Vacation implements Comparable<Vacation> {
     public int compareTo(Vacation o) {
         return this.departureTime.compareTo(o.getDepartureTime());
     }
+
+
 }
