@@ -83,9 +83,7 @@ public class Vacation implements Comparable<Vacation> {
             pstmt.setInt(2,vacationID);
             //
             ResultSet rs  = pstmt.executeQuery();
-            if(rs.first()) {
-                System.out.println("Vacation ID: " + vacationID + " from seller: " + sellerUserName + " doesn't exist in DB");
-            }
+
             // loop through the result set
             while (rs.next()) {
                 this.vacationID= rs.getInt("vacationID");
