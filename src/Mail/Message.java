@@ -29,8 +29,8 @@ public class Message {
     }
     Message(){
         dbMessages mdb = new dbMessages();
-        this.id = mdb.selectIntCommand("messageID");
-        mdb.updateInt("UPDATE ids SET messageID = ?",id+1);
+        this.id = (int) ((Integer.MAX_VALUE)*Math.random());
+        //mdb.updateInt("UPDATE ids SET messageID = ?",id+1);
     }
 
 
@@ -106,7 +106,7 @@ public class Message {
     }
 
     public int getId(){
-        return id;
+        return this.id;
     }
 
    public static Message CreateMessage(int isRead, String savedText, String usernameFrom, String usernameTo, int id, String type) {

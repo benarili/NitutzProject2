@@ -78,22 +78,15 @@ public class MailboxController {
         javafx.scene.control.Button deny = new Button("Deny Purchase");
         accept.setOnAction(e->handlePress(true, (MessageRequestToConfirm) m));
         deny.setOnAction(e->handlePress(false, (MessageRequestToConfirm) m));
-        parameters.setLayoutX(40);
-        parameters.setLayoutY( height );
-        parameters.setPrefWidth( 1000 );
-        height+=60;
-        accept.setLayoutX( 40 );
-        accept.setLayoutY( height );
-        deny.setLayoutX( 200 );
-        deny.setLayoutY( height );
-        height+=60;
         HBox hb;
-        if(m instanceof MessageRequestToConfirm && (((MessageRequestToConfirm) m).haveResponded())){
+        if(m instanceof MessageRequestToConfirm /*&& ((MessageRequestToConfirm) m).haveResponded()*/){
             hb= new HBox( parameters,accept,deny );
         }
         else {
             hb= new HBox( parameters);
         }
+        hb.setLayoutY(height);
+        height +=100;
         if(group==null){
             group=new Group( hb );
         }

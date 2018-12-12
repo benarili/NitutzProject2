@@ -61,7 +61,7 @@ public abstract class AdbEntry {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return Integer.parseInt(record);
+        return Integer.parseInt(record.trim());
     }
 
     /**

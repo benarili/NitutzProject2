@@ -44,9 +44,9 @@ public class Mailbox {
         dbMessages db = new dbMessages();
         mailbox.messages=db.getAllReceived(user.getUsername());
         for (Message m :mailbox.messages){
-            if(m instanceof MessageRequestToConfirm && !((MessageRequestToConfirm) m).haveResponded){
+            /*if(m instanceof MessageRequestToConfirm && !((MessageRequestToConfirm) m).haveResponded){
                 mailbox.messages.remove(m);
-            }
+            }*/
         }
         return mailbox;
     }
