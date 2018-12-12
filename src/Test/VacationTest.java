@@ -74,6 +74,7 @@ public static boolean firstTest = true;
         System.out.println(v);
 
         printAllAvalibleVacations(vacationTableEntry);
+        printAllAvalibleVacationsWithoutRegisteredUser(vacationTableEntry);
     }
 
     private static void itzikVacations(VacationTableEntry vacationTableEntry) {
@@ -118,6 +119,16 @@ public static boolean firstTest = true;
         System.out.println();
         System.out.println("**** print All Avalible Vacations ****");
         ArrayList<Vacation> allAvalibleVacations = vacationTableEntry.getAllAvailableVacations();
+        if (allAvalibleVacations.size() != 0){
+            for (Vacation v : allAvalibleVacations)
+                System.out.println(v.toString());
+        }
+    }
+    private static void printAllAvalibleVacationsWithoutRegisteredUser(VacationTableEntry vacationTableEntry) {
+        System.out.println();
+        System.out.println("**** print All Avalible Vacations Without Registered User ****");
+        String registeredUser = "Liad";
+        ArrayList<Vacation> allAvalibleVacations = vacationTableEntry.getAllAvailableVacations("Liad");
         if (allAvalibleVacations.size() != 0){
             for (Vacation v : allAvalibleVacations)
                 System.out.println(v.toString());
