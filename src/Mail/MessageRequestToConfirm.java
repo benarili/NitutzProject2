@@ -32,6 +32,7 @@ public class MessageRequestToConfirm extends Message{
 
     private MessageConfirmedPurchase.Type accept(){
         if(vacationToConfirm.isAvalible()){
+
             Transaction transaction = Transaction.createTransaction(getFromUser(),getTo(),vacationToConfirm);
             if(transaction==null)
                 return MessageConfirmedPurchase.Type.UNABLETOCOMPLETEPURCHASE;

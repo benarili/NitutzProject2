@@ -70,7 +70,7 @@ public class dbMessages extends AdbEntry {
             ResultSet rs = pstmt.executeQuery();
             List<Message> toReturn = new ArrayList<>();
             while (rs.next()){
-                Message message = Message.CreateMessage(rs.getInt(2),rs.getString(6),rs.getString(4),rs.getString(5),rs.getInt("messageID"),rs.getString(1));
+                Message message = Message.CreateMessage(rs.getInt(2),rs.getString(6),rs.getString(4),rs.getString(5),rs.getInt(1),rs.getString(3));
                 if(message!=null)
                     toReturn.add(message);
             }

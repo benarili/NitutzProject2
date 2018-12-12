@@ -23,6 +23,7 @@ public class Transaction {
     private boolean isInDB = false;
 
     public static Transaction createTransaction(User buyer, User seller, Vacation vacation){
+
         Payment payment = Payment.createPayment("thisis","asimlulation",vacation.getPrice());
         if(payment==null)
             return null;
