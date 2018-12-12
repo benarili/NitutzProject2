@@ -11,7 +11,7 @@
       </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="Nituz" uuid="4a6c4810-ea4d-4187-a49b-7a57cb98d106">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>1190961c-ad42-47dc-91e6-8b5b4016b78e</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\tsizer\Documents\לימודים\שנה ג\סמסטר א\ניתוצ\מטלות\פרוייקט\NitutzProject2\Nituz.db</jdbc-url>
@@ -21,6 +21,23 @@
       <libraries>
         <library>
           <url>file://$USER_HOME$/IdeaProjects/nituzProject/sqlite-jdbc-3.23.1.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="Nituz [2]" uuid="0e4e368f-341c-4d7c-a5f1-e2c67e620b08">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\liadb\Documents\School\Nitutz\NitutzProject2\NitutzProject2\Nituz.db</jdbc-url>
+      <driver-properties>
+        <property name="enable_load_extension" value="true" />
+      </driver-properties>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
+        </library>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
         </library>
       </libraries>
     </data-source>

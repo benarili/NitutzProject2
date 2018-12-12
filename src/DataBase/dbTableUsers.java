@@ -5,3 +5,4 @@ import java.sql.*;
 
 public class dbTableUsers extends AdbEntry{
 }
+
