@@ -7,9 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.*;
 import User.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class AddVacationController {
 
@@ -61,12 +61,13 @@ public class AddVacationController {
             result.setContentText( "one or more of your inputs are incorect" );
         }
         else{
-            Vacation vac= new Vacation( username,aviationComp, )
+            Vacation vac= new Vacation( username,aviationComp,Date.valueOf( departureTime ),Date.valueOf( launTime ),Date.valueOf(backDepartureTime),Date.valueOf(backLaunch),Integer.parseInt( bag ),Integer.parseInt( ticket ),source,destination,type,Double.parseDouble( amount ) );
+            Alert alert=new Alert( Alert.AlertType.INFORMATION );
+            alert.setContentText( "Vacation added succesfuly" );
+            alert.showAndWait();
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
         }
-
-
-
-
     }
     private boolean isInteger(String num){
         try{
