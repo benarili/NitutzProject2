@@ -76,14 +76,16 @@ public class Vacation implements Comparable<Vacation> {
      */
     public Vacation(String sellerUserName, int vacationID) {
         VacationTableEntry vacationTableEntry = new VacationTableEntry();
-        String querry = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE  seller = ? AND vacationID = ?";
+        String querry = "SELECT * FROM vacations WHERE  seller = ? AND vacationID = ?;";
         try (Connection conn = vacationTableEntry.connect();
              PreparedStatement pstmt  = conn.prepareStatement(querry)){
             pstmt.setString(1,sellerUserName);
             pstmt.setInt(2,vacationID);
             //
             ResultSet rs  = pstmt.executeQuery();
-
+            if(rs.first()) {
+                System.out.println("Vacation ID: " + vacationID + " from seller: " + sellerUserName + " doesn't exist in DB");
+            }
             // loop through the result set
             while (rs.next()) {
                 this.vacationID= rs.getInt("vacationID");
@@ -180,9 +182,6 @@ public class Vacation implements Comparable<Vacation> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("VacationID: ");
-        sb.append(vacationID);
-        sb.append(", ");
         sb.append("seller: ");
         sb.append(sellerName);
         sb.append(", ");
@@ -194,9 +193,22 @@ public class Vacation implements Comparable<Vacation> {
         sb.append(",  ");
         sb.append("price: ");
         sb.append(price);
-        sb.append(", ");
+        sb.append("\n");
         sb.append("departureTime: ");
-
+        sb.append(departureTime.toString());
+        sb.append(", ");
+        sb.append("launchTime: ");
+        sb.append(launchTime.toString());
+        sb.append("\n");
+        if (backDepartureTime != null) {
+            sb.append("backDepartureTime: ");
+            sb.append(backDepartureTime.toString());
+            sb.append(", ");
+        }
+        if (backLaunchTime != null) {
+            sb.append("backLaunchTime: ");
+            sb.append(backLaunchTime.toString());
+        }
         return sb.toString();
     }
 

@@ -12,6 +12,7 @@ public class User {
     private String lastname="";
     private String birthDate="";
     private dbTableUsers db=new dbTableUsers();
+    private Mailbox mailbox;
     String[] columns={"username","password","email","name","last_name","birth_date"};
     public User(String userName,String password){
         String[] values= {userName,password};
@@ -30,6 +31,7 @@ public class User {
             selectedUser=user.get( 0 );
             addValues(selectedUser);
         }
+        //this.mailbox = Mailbox.recreateMailBox(this);
     }
     public User(String username, String pass, String email, String name, String lastname, String birthDath) {
         this.username = username;
@@ -38,6 +40,7 @@ public class User {
         this.name = name;
         this.lastname = lastname;
         this.birthDate = birthDath;
+        this.mailbox = new Mailbox(this);
     }
 
     /**
@@ -121,4 +124,5 @@ public class User {
         return false;
     }
 
+    public Mailbox getMailbox(){return this.mailbox;}
 }
