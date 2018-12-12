@@ -21,7 +21,7 @@ public class MessageRequestToConfirm extends Message{
 
     private MessageConfirmedPurchase.Type accept(){
         if(vacationToConfirm.isAvalible()){
-            Transaction transaction = Transaction.createTransaction(getFrom(),getTo(),vacationToConfirm);
+            Transaction transaction = Transaction.createTransaction(getFromUser(),getTo(),vacationToConfirm);
             if(transaction==null)
                 return MessageConfirmedPurchase.Type.UNABLETOCOMPLETEPURCHASE;
             transaction.addToDataBase();
@@ -42,10 +42,10 @@ public class MessageRequestToConfirm extends Message{
             type = MessageConfirmedPurchase.Type.USERREGECTED;
         }
         Mailbox sellerMailBox = getTo().getMailbox();
-        Mailbox buyerMailBox = getFrom().getMailbox();
-        Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getFrom());
-        sellerMailBox.sendMessage(message,buyerMailBox.getOwner());
-        buyerMailBox.sendMessage(message,sellerMailBox.getOwner());
+        Mailbox buyerMailBox = getFromUser().getMailbox();
+        Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getFromUser());
+        sellerMailBox.sendMessage(message,buyerMailBox.getOwnerUserName());
+        buyerMailBox.sendMessage(message,sellerMailBox.getOwnerUserName());
     }
 
 
@@ -62,7 +62,7 @@ public class MessageRequestToConfirm extends Message{
             return "You can no longer confirm sale of message. The vacation may no longer be available or you have already responded to this message";
         }
         else {
-            return "User: "+getFrom().getUsername()+" wants to purchase vacation:" + vacationToConfirm.getVacationID()+"\n" +
+            return "User: "+getUserNameFrom()+" wants to purchase vacation:" + vacationToConfirm.getVacationID()+"\n" +
                     "Choose your response";
         }
     }
