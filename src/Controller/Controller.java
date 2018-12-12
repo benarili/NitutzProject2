@@ -66,6 +66,10 @@ public class Controller implements Observer {
         profile.setOnAction( e -> updateUser(  ) );
         profile.setLayoutX(480);
         profile.setLayoutY(20);
+        mailbox=new Button( "my mailbox" );
+        mailbox.setOnAction( e->getMailBox() );
+        mailbox.setLayoutX(330);
+        mailbox.setLayoutY(20);
     }
 
     private void myVacations() {
@@ -143,9 +147,9 @@ public class Controller implements Observer {
     public void update(Observable o, Object arg) {
         if(isConnected){
             Label label = new Label("Hello " + user.getName());
-            label.setLayoutX(350);
+            label.setLayoutX(230);
             label.setLayoutY(20);
-            Group group=new Group( root,label,logout,showVacations,addVacation,myVacations,profile );
+            Group group=new Group( root,label,logout,showVacations,addVacation,myVacations,profile,mailbox );
             Scene scene = new Scene(group, 800, 700);
             scene.getStylesheets().add("/View/MyStyle.css");
             primaryStage.setScene(scene);
@@ -270,5 +274,8 @@ public class Controller implements Observer {
     public void closeButtonAction(ActionEvent actionEvent) {
         //Stage stage = (Stage) closeButton.getScene().getWindow();
         primaryStage.close();
+    }
+
+    public void getMailBox() {
     }
 }
