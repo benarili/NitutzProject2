@@ -18,7 +18,8 @@ public class dbMessages extends AdbEntry {
         String usernameFrom = message.getUserNameFrom();
         String userNameTo = message.getTo().getUsername();
         String messageText = message.getTextToSave();
-        String insertCommand = "INSERT INTO messages(messageID,isRead,messageType,userNameFrom,userNameTo,messageText) VALUES(?,?,?,?,?,?)";
+        String insertCommand = "INSERT INTO messages(messageID,isRead,messageType," +
+                "userNameFrom,userNameTo,messageText) VALUES(?,?,?,?,?,?)";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(insertCommand)) {
             pstmt.setInt(1,messageID);
