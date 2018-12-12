@@ -10,19 +10,19 @@ import java.util.List;
 public class MessageConfirmedPurchase extends Message{
 
     private Vacation vacation;
-    private User seller;
-    private User buyer;
+    private String seller;
+    private String buyer;
 
     MessageConfirmedPurchase(boolean isRead, String savedText, String usernameFrom, String usernameTo, int id) {
         super(isRead, savedText, usernameFrom, usernameTo, id);
         setTextFromSavedText(savedText);
     }
 
-    protected MessageConfirmedPurchase(Vacation vacation,Type type,User buyer) {
+    public MessageConfirmedPurchase(Vacation vacation, Type type, String buyer) {
         super();
         this.vacation=vacation;
         this.buyer=buyer;
-        this.seller=new User(vacation.getSeller());
+        this.seller=(vacation.getSeller());
         setText(type);
     }
 
@@ -38,11 +38,11 @@ public class MessageConfirmedPurchase extends Message{
         String text=null;
         switch (type){
             case USERREGECTED:
-                text="purchase of vacation: "+vacation.getVacationID()+" has been rejected by user: "+seller.getUsername();
+                text="purchase of vacation: "+vacation.getVacationID()+" has been rejected by user: "+seller;
                 break;
             case COMPLETEDTRANSACTION:
                 text = "purchase of vacation: "+vacation.getVacationID()+" has been completed succesfully.\n" +
-                        "User: "+buyer.getUsername()+"successfully purchased vacation from User: "+seller.getUsername();
+                        "User: "+buyer+"successfully purchased vacation from User: "+seller;
                 break;
             case FLIGHTNOTAVAILABLE:
                 text = "purchase of vacation has not been completed successfully, because flight is no longer available";
@@ -57,8 +57,8 @@ public class MessageConfirmedPurchase extends Message{
     public void setTextFromSavedText(String savedText){
         List<String> savedTextSplit = new ArrayList<>();
         savedTextSplit.addAll(Arrays.asList(savedText.split("\n")));
-        seller = new User(savedTextSplit.remove(0));
-        buyer = new User(savedTextSplit.remove(0));
+        seller = (savedTextSplit.remove(0));
+        buyer = (savedTextSplit.remove(0));
         String vacationKeys = savedTextSplit.remove(0);
         String[] vacationKeysSplit = vacationKeys.split("\t");
         vacation = new Vacation(vacationKeysSplit[0],Integer.parseInt(vacationKeysSplit[1]));
@@ -70,8 +70,8 @@ public class MessageConfirmedPurchase extends Message{
     }
     public String getTextToSave(){
         List<String> text = new ArrayList<>();
-        text.add(seller.getUsername());
-        text.add(buyer.getUsername());
+        text.add(seller);
+        text.add(buyer);
         text.add(vacation.getSeller()+"\t"+vacation.getVacationID());
         text.add(getText());
         String toReturn = "";

@@ -19,6 +19,17 @@ public class MessageRequestToConfirm extends Message{
         setTextFromSavedText(savedText);
     }
 
+    public MessageRequestToConfirm(Vacation vacation,int id){
+        super(id);
+        this.vacationToConfirm = vacation;
+        haveResponded=false;
+    }
+    public MessageRequestToConfirm(Vacation vacation){
+        super();
+        this.vacationToConfirm = vacation;
+        haveResponded=false;
+    }
+
     private MessageConfirmedPurchase.Type accept(){
         if(vacationToConfirm.isAvalible()){
             Transaction transaction = Transaction.createTransaction(getFromUser(),getTo(),vacationToConfirm);
@@ -41,9 +52,9 @@ public class MessageRequestToConfirm extends Message{
         else {
             type = MessageConfirmedPurchase.Type.USERREGECTED;
         }
-        Mailbox sellerMailBox = getTo().getMailbox();
-        Mailbox buyerMailBox = getFromUser().getMailbox();
-        Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getFromUser());
+        Mailbox sellerMailBox = Mailbox.recreateMailBox(getFromUser());
+        Mailbox buyerMailBox = Mailbox.recreateMailBox(getTo());
+        Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getUserNameFrom());
         sellerMailBox.sendMessage(message,buyerMailBox.getOwnerUserName());
         buyerMailBox.sendMessage(message,sellerMailBox.getOwnerUserName());
     }
@@ -76,13 +87,6 @@ public class MessageRequestToConfirm extends Message{
         String haveResponded = splitText.remove(0);
         String vacationKeys = splitText.remove(splitText.size()-1);
 
-        //set text
-        String text = "";
-        for (int i = 0; i < splitText.size(); i++) {
-            text+=splitText.get(i)+"\n";
-        }
-        text = text.substring(0,text.length()-1);
-        setText(text);
 
         //set vacation
         String[] vacationKeysSplit = vacationKeys.split("\t");
@@ -97,8 +101,7 @@ public class MessageRequestToConfirm extends Message{
     public String getTextToSave(){
         String vacation = vacationToConfirm.getSeller()+"\t"+vacationToConfirm.getVacationID();
         String responded = this.haveResponded ? "t" : "f";
-        String messageText = this.text;
 
-        return responded+"\n"+messageText+"\n"+vacation;
+        return responded+"\n"+vacation;
     }
 }

@@ -27,10 +27,8 @@ public class Mailbox {
     }
 
     public void sendMessage(Message toSend,String otherUserName){
-        Mailbox mailboxOther = new User(otherUserName).getMailbox();
         toSend.setUserNameFrom(owner);
         toSend.setUserNameTo(otherUserName);
-        mailboxOther.addMessage(toSend);
         toSend.addToDataBase();
     }
 

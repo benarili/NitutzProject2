@@ -12,16 +12,12 @@ public class VacationTableEntry extends AdbEntry {
         ArrayList<Vacation> vacationsArrayList = new ArrayList<>();
         String sql;
         Date[] values;
-        if (backLaunchTime == null) {
-            sql = "SELECT * FROM vacations WHERE departureTime > ? AND avalible = 1;";
-            values = new Date[1];
-            values[0] = departureTime;
-        } else {
-            sql = "SELECT * FROM vacations WHERE departureTime > ? AND backLaunchTime < ? AND avalible = 1;";
-            values = new Date[2];
-            values[0] = departureTime;
-            values[1] = backLaunchTime;
-        }
+
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE departureTime > ? AND backLaunchTime < ? AND avalible = 1;";
+        values = new Date[2];
+        values[0] = departureTime;
+        values[1] = backLaunchTime;
+
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -186,7 +182,7 @@ public class VacationTableEntry extends AdbEntry {
     public ArrayList<Vacation> getMyVacations(String userName){
         ArrayList<Vacation>  res = new ArrayList<Vacation>();
         String sql;
-        sql = "SELECT * FROM vacations WHERE avalible = 1 AND seller = ?;";
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE avalible = 1 AND seller = ?;";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1,userName);
