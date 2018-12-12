@@ -13,7 +13,7 @@ Label{
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
-Group{
+HBox{
     -fx-border-color: black;
     -fx-border-style: solid;
 }

@@ -2,52 +2,103 @@ package Mail;
 
 import Transactions.Transaction;
 import User.*;
+import Vacation.Vacation;
 
-public class MessagerequestToConfirm extends Message{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    Transaction toConfirm;
-    ConfirmationAction confirmationAction;
+public class MessageRequestToConfirm extends Message{
+
+    Vacation vacationToConfirm;
+    boolean haveResponded;
 
 
-    MessagerequestToConfirm(boolean isRead, String text, User from, User to, int id, Transaction toConfirm, ConfirmationAction confirmationAction) {
-        super(isRead, text, from, to, id);
-        this.toConfirm = toConfirm;
-        this.confirmationAction = confirmationAction;
+    MessageRequestToConfirm(boolean isRead, String savedText, String usernameFrom, String usernameTo, int id) {
+        super(isRead, savedText, usernameFrom, usernameTo, id);
+        setTextFromSavedText(savedText);
     }
 
-    public MessagerequestToConfirm(User from, User to, Transaction toConfirm, ConfirmationAction confirmationAction) {
-        super(from,to);
-        this.confirmationAction=confirmationAction;
-        this.toConfirm=toConfirm;
-        setText(textMessage(confirmationAction,toConfirm));
-
-    }
-
-    public void confirm(boolean answer){
-
-    }
-
-    protected String getType(){
-        return "confirmation";
-    }
-
-    private String textMessage(ConfirmationAction confirmationAction, Transaction t){
-        String toReturn = null;
-        switch (confirmationAction){
-            case CONFIRMSALE:
-                toReturn = "User: "+t.getBuyer().getUsername()+" wants to buy vacation:"+t.getVacation().getVacationID()+" from you.";
-                break;
-            case CONFIRMCANCEL:
-                toReturn = "User: "+t.getBuyer().getUsername()+" wants to cancel vacation:"+t.getVacation().getVacationID();
+    private MessageConfirmedPurchase.Type accept(){
+        if(vacationToConfirm.isAvalible()){
+            Transaction transaction = Transaction.createTransaction(getFrom(),getTo(),vacationToConfirm);
+            if(transaction==null)
+                return MessageConfirmedPurchase.Type.UNABLETOCOMPLETEPURCHASE;
+            transaction.addToDataBase();
+            vacationToConfirm.setAvalible(false);
+            return MessageConfirmedPurchase.Type.COMPLETEDTRANSACTION;
         }
-        return toReturn;
+        else
+            return MessageConfirmedPurchase.Type.FLIGHTNOTAVAILABLE;
+    }
+
+    public void confirm(boolean action){
+        haveResponded = true;
+        MessageConfirmedPurchase.Type type;
+        if (action==true){
+            type = accept();
+        }
+        else {
+            type = MessageConfirmedPurchase.Type.USERREGECTED;
+        }
+        Mailbox sellerMailBox = getTo().getMailbox();
+        Mailbox buyerMailBox = getFrom().getMailbox();
+        Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getFrom());
+        sellerMailBox.sendMessage(message,buyerMailBox.getOwner());
+        buyerMailBox.sendMessage(message,sellerMailBox.getOwner());
     }
 
 
-    public enum  ConfirmationAction{
-        CONFIRMSALE,CONFIRMCANCEL;
+
+    public String getType(){
+        return "request_confirmation";
     }
 
 
 
+    @Override
+    public String getText() {
+        if(haveResponded && vacationToConfirm.isAvalible()){
+            return "You can no longer confirm sale of message. The vacation may no longer be available or you have already responded to this message";
+        }
+        else {
+            return "User: "+getFrom().getUsername()+" wants to purchase vacation:" + vacationToConfirm.getVacationID()+"\n" +
+                    "Choose your response";
+        }
+    }
+
+
+
+
+    public void setTextFromSavedText(String savedText){
+        List<String> splitText = new ArrayList<>();
+        splitText.addAll(Arrays.asList(savedText.split("\n")));
+        String haveResponded = splitText.remove(0);
+        String vacationKeys = splitText.remove(splitText.size()-1);
+
+        //set text
+        String text = "";
+        for (int i = 0; i < splitText.size(); i++) {
+            text+=splitText.get(i)+"\n";
+        }
+        text = text.substring(0,text.length()-1);
+        setText(text);
+
+        //set vacation
+        String[] vacationKeysSplit = vacationKeys.split("\t");
+        this.vacationToConfirm = new Vacation(vacationKeysSplit[0],Integer.parseInt(vacationKeysSplit[1]));
+
+        //set have read
+        this.haveResponded = vacationToConfirm.isAvalible() && haveResponded.equals("t");
+    }
+
+
+
+    public String getTextToSave(){
+        String vacation = vacationToConfirm.getSeller()+"\t"+vacationToConfirm.getVacationID();
+        String responded = this.haveResponded ? "t" : "f";
+        String messageText = this.text;
+
+        return responded+"\n"+messageText+"\n"+vacation;
+    }
 }
