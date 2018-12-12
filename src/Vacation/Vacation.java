@@ -5,7 +5,7 @@ import DataBase.VacationTableEntry;
 
 import java.sql.*;
 
-public class Vacation {
+public class Vacation implements Comparable<Vacation> {
     private static int incrementID = 0;
     private int vacationID;
     private String sellerName;
@@ -181,7 +181,43 @@ public class Vacation {
     }
     @Override
     public String toString() {
-        return "seller: "+sellerName+",  country of origin: " + fromCountry+ ",  country destination: "+destinationCountry+ ",  price: " + price +", departureTime: " +departureTime.toString()
-                + ",  launchTime: " + launchTime.toString()+ ",  backDepartureTime: "+backDepartureTime.toString()+",  backLaunchTime: "+backLaunchTime.toString() ;
+        StringBuilder sb = new StringBuilder();
+        sb.append("VacationID: ");
+        sb.append(vacationID);
+        sb.append(", ");
+        sb.append("seller: ");
+        sb.append(sellerName);
+        sb.append(", ");
+        sb.append("country of origin: ");
+        sb.append(fromCountry);
+        sb.append(",  ");
+        sb.append("country destination: ");
+        sb.append(destinationCountry);
+        sb.append(",  ");
+        sb.append("price: ");
+        sb.append(price);
+        sb.append(", ");
+        sb.append("departureTime: ");
+        sb.append(departureTime.toString());
+        sb.append(", ");
+        sb.append("launchTime: ");
+        sb.append(launchTime.toString());
+        sb.append(", ");
+        if (backDepartureTime != null) {
+            sb.append("backDepartureTime: ");
+            sb.append(backDepartureTime.toString());
+            sb.append(", ");
+        }
+        if (backLaunchTime != null) {
+            sb.append("backLaunchTime: ");
+            sb.append(backLaunchTime.toString());
+            sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Vacation o) {
+        return this.departureTime.compareTo(o.getDepartureTime());
     }
 }

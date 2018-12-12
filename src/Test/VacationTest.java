@@ -36,9 +36,8 @@ public static boolean firstTest = true;
         //3 Itzik
         Date d3departureTime = Date.valueOf("2020-12-30");
         Date d3launchTime = Date.valueOf("2020-12-30");
-        //4 Zina
-        Date d4departureTime = Date.valueOf("2021-12-30");
-        Date d4launchTime = Date.valueOf("2021-12-30");
+        Date d3backDepartureTime = Date.valueOf("2021-12-30");
+        Date d3backLaunchTime = Date.valueOf("2021-12-30");
 
         Date dateLast = Date.valueOf("2023-12-30");
 
@@ -46,52 +45,68 @@ public static boolean firstTest = true;
         double p1 = 120;
         double p2 = 150;
         double p3 = 70;
-        double p4 = 40;
 
         //vacations
         Vacation v1 = new Vacation("Liad","El-Al",d1departureTime,d1launchTime,d1backDepartureTime,d1backLaunchTime,
                                     20,2,"Israel","Colombia","adult",p1);
         Vacation v2 = new Vacation("Itzik","SwissAirLine",d2departureTime,d2launchTime,d2backDepartureTime,d2backLaunchTime,
                 40,2,"Israel","Swiss","adult",p2);
-        Vacation v3 = new Vacation("Itzik","Avianka",d3departureTime,d3launchTime,null,null,
+        Vacation v3 = new Vacation("Itzik","Avianka",d3departureTime,d3launchTime,d3backDepartureTime,d3backLaunchTime,
                 15,1,"Israel","Brazil","adult",p3);
-        Vacation v4 = new Vacation("Zina","DogyStyle",d4departureTime,d4launchTime,null,null,
-                0,1,"Israel","DogsLand","baby",p4);
 
-
-        System.out.println();
-        System.out.println("**** vacations First To Middle ****");
-        ArrayList<Vacation> vacationsFirstToMiddle = vacationTableEntry.selectByDates(dateFirst,dateMiddle);
-        if (vacationsFirstToMiddle.size() != 0){
-            for (Vacation v : vacationsFirstToMiddle)
-                System.out.printf(v.toString());
-        }
-        System.out.println("**** vacations Middle To Last ****");
-        ArrayList<Vacation> vacationsMiddleToLast = vacationTableEntry.selectByDates(dateMiddle,dateLast);
-        if (vacationsMiddleToLast.size() != 0){
-            for (Vacation v : vacationsFirstToMiddle)
-                System.out.printf(v.toString());
-        }
-        System.out.println();
-        System.out.println("**** vacations First To Last ****");
-        ArrayList<Vacation> vacationsFirstToLast = vacationTableEntry.selectByDates(dateFirst,dateLast);
-        if (vacationsFirstToLast.size() != 0){
-            for (Vacation v : vacationsFirstToMiddle)
-                System.out.printf(v.toString());
-        }
-        System.out.println();
-        System.out.println("**** Zina vacations ****");
-        ArrayList<Vacation> itsiksVacations = vacationTableEntry.getMyVacations("Zina");
-        if (itsiksVacations.size() != 0){
-            for (Vacation v : vacationsFirstToMiddle)
-                System.out.printf(v.toString());
-        }
-        System.out.println("**** Itzik 1 vacations update avalible ****");
+        firstToMiddle(vacationTableEntry, dateFirst, dateMiddle);
+        middleToLast(vacationTableEntry, dateMiddle, dateLast);
+        firstToLast(vacationTableEntry, dateFirst, dateLast);
+        itzikVacations(vacationTableEntry);
+        System.out.println("**** Itzik 1 vacations update NOT avalible ****");
         boolean itzik1 = vacationTableEntry.updateAvailable(2,0);
-        if(itzik1) System.out.printf("update itsik1 success!");
+        if(itzik1) System.out.println("update itsik1 success!");
+
+        System.out.println("**** Itzik 2 vacations update NOT avalible ****");
+        boolean itzik2 = vacationTableEntry.updateAvailable(3,0);
+        if(itzik2) System.out.println("update itsik2 success!");
 
         System.out.println("**** Itzik 2 vacations update avalible ****");
-        boolean itzik2 = vacationTableEntry.updateAvailable(3,0);
-        if(itzik2) System.out.printf("update itsik2 success!");
+        boolean itzik3 = vacationTableEntry.updateAvailable(3,1);
+        if(itzik3) System.out.printf("update itsik2 success!");
+    }
+
+    private static void itzikVacations(VacationTableEntry vacationTableEntry) {
+        System.out.println();
+        System.out.println("**** Itzik vacations ****");
+        ArrayList<Vacation> zinaVacations = vacationTableEntry.getMyVacations("Itzik");
+        if (zinaVacations.size() != 0){
+            for (Vacation v : zinaVacations)
+                System.out.println(v.toString());
+        }
+    }
+
+    private static void firstToLast(VacationTableEntry vacationTableEntry, Date dateFirst, Date dateLast) {
+        System.out.println();
+        System.out.println("**** vacations First To Last ****");
+        ArrayList<Vacation> vacationsFirstToLast = vacationTableEntry.selectByDatesWithBackFlights(dateFirst,dateLast);
+        if (vacationsFirstToLast.size() != 0){
+            for (Vacation v : vacationsFirstToLast)
+                System.out.println(v.toString());
+        }
+    }
+
+    private static void middleToLast(VacationTableEntry vacationTableEntry, Date dateMiddle, Date dateLast) {
+        System.out.println("**** vacations Middle To Last ****");
+        ArrayList<Vacation> vacationsMiddleToLast = vacationTableEntry.selectByDatesWithBackFlights(dateMiddle,dateLast);
+        if (vacationsMiddleToLast.size() != 0){
+            for (Vacation v : vacationsMiddleToLast)
+                System.out.println(v.toString());
+        }
+    }
+
+    private static void firstToMiddle(VacationTableEntry vacationTableEntry, Date dateFirst, Date dateMiddle) {
+        System.out.println();
+        System.out.println("**** vacations First To Middle ****");
+        ArrayList<Vacation> vacationsFirstToMiddle = vacationTableEntry.selectByDatesWithBackFlights(dateFirst,dateMiddle);
+        if (vacationsFirstToMiddle.size() != 0){
+            for (Vacation v : vacationsFirstToMiddle)
+                System.out.println(v.toString());
+        }
     }
 }

@@ -4,10 +4,11 @@ import Vacation.Vacation;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class VacationTableEntry extends AdbEntry {
 
-    public ArrayList<Vacation> selectByDates(Date departureTime, Date backLaunchTime) {
+    public ArrayList<Vacation> selectByDatesWithBackFlights(Date departureTime, Date backLaunchTime) {
         ArrayList<Vacation> vacationsArrayList = new ArrayList<>();
         String sql;
         Date[] values;
@@ -90,7 +91,7 @@ public class VacationTableEntry extends AdbEntry {
         return success;
     }
     public boolean updateAvailable(int vacID, int update) {
-        String sqlCommand = "UPDATE vacations SET avalible = ? WHERE vacationID = ? ORDER BY departureTime;";
+        String sqlCommand = "UPDATE vacations SET avalible = ? WHERE vacationID = ?;";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sqlCommand)) {
             pstmt.setInt(1,update);
