@@ -118,7 +118,7 @@ public class VacationTableEntry extends AdbEntry {
     public ArrayList<Vacation> getAllAvailableVacations(){
         ArrayList<Vacation>  res = new ArrayList<Vacation>();
         String sql;
-        sql = "SELECT * FROM vacations WHERE avalible = 1;";
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE avalible = 1 ;";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -146,6 +146,41 @@ public class VacationTableEntry extends AdbEntry {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return res;
+    }
+    public ArrayList<Vacation> getAllAvailableVacations(String registeredUerName){
+        ArrayList<Vacation>  res = new ArrayList<Vacation>();
+        String sql;
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE seller !=  ? AND avalible = 1 ;";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1,registeredUerName);
+            // set the value
+            ResultSet rs = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                Vacation currRecord = new Vacation(rs.getInt("vacationID"),
+                        rs.getString("seller"),
+                        rs.getString("aviationCompany"),
+                        rs.getDate("departureTime"),
+                        rs.getDate("launchTime"),
+                        rs.getDate("backDepartureTime"),
+                        rs.getDate("backLaunchTime"),
+                        rs.getInt("baggage"),
+                        rs.getInt("tickets"),
+                        rs.getString("fromCountry"),
+                        rs.getString("destinationCountry"),
+                        rs.getString("ticketType"),
+                        rs.getDouble("price"),
+                        rs.getInt("avalible"));
+                res.add(currRecord);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
         return res;
     }
     public ArrayList<Vacation> getMyVacations(String userName){
