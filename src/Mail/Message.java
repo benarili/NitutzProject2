@@ -24,6 +24,9 @@ public class Message {
         idCounter++;
     }
 
+    Message(int id){
+        this.id=id;
+    }
     Message(){
         this.id = idCounter;
         idCounter++;
@@ -81,16 +84,16 @@ public class Message {
         Connection connection = db.connect();
         try{
             String sql = "INSERT INTO messages " +
-                    "(userFrom,userTo,messageText,messageType,messageId,isRead) " +
+                    "(messageID,isREad,messageType,userNameFrom,userNameTo,messageText) " +
                     "Values(?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             int isRead = this.isRead==true ? 1 : 0;
-            preparedStatement.setString(1,userNameFrom);
-            preparedStatement.setString(2,userNameTo);
-            preparedStatement.setString(3,this.getText());
-            preparedStatement.setString(4,this.getType());
-            preparedStatement.setInt(5,this.id);
-            preparedStatement.setInt(6,isRead);
+            preparedStatement.setInt(1,getId());
+            preparedStatement.setInt(2,isRead);
+            preparedStatement.setString(3,getType());
+            preparedStatement.setString(4,userNameFrom);
+            preparedStatement.setString(5,userNameTo);
+            preparedStatement.setString(6,getTextToSave());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -98,7 +101,7 @@ public class Message {
     }
 
     public String getTextToSave(){
-        return getText()+"\n"+getType();
+        return getText();
     }
 
     public int getId(){
@@ -118,18 +121,14 @@ public class Message {
 
     protected Message(boolean isRead, String savedText, String usernameFrom, String usernameTo, int id){
         this.isRead = isRead;
-        setTextFromSavedText(savedText);
+        this.text=savedText;
         this.userNameFrom = usernameFrom;
         this.userNameTo = usernameTo;
         this.id = id;
     }
 
     protected void setTextFromSavedText(String savedText){
-        String[] split = savedText.split("\n");
-        text = "";
-        for (int i = 0; i < split.length-1; i++) {
-            text+=split[i]+"\n";
-        }
+        this.text=savedText;
     }
 
     @Override
