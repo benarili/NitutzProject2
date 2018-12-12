@@ -212,4 +212,5 @@ public class VacationTableEntry extends AdbEntry {
         }
         return res;
     }
+
 }
