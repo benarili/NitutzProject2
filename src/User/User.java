@@ -31,6 +31,7 @@ public class User {
             selectedUser=user.get( 0 );
             addValues(selectedUser);
         }
+        this.mailbox = Mailbox.recreateMailBox(this);
     }
     public User(String username, String pass, String email, String name, String lastname, String birthDath) {
         this.username = username;
