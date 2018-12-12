@@ -118,7 +118,7 @@ public class VacationTableEntry extends AdbEntry {
     public ArrayList<Vacation> getAllAvailableVacations(){
         ArrayList<Vacation>  res = new ArrayList<Vacation>();
         String sql;
-        sql = "SELECT * FROM vacations WHERE available = 1;";
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE avalible = 1 ;";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -145,6 +145,10 @@ public class VacationTableEntry extends AdbEntry {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+//        Date now = new Date();
+        for (Vacation v : res){
+//            if (v.getDepartureTime().after(new Date()));
         }
         return res;
     }
