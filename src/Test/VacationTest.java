@@ -19,6 +19,7 @@ public static boolean firstTest = true;
         }
 
         Date dateFirst = Date.valueOf("2015-12-30");
+
         //1 Liad
         Date d1departureTime = Date.valueOf("2018-12-30");
         Date d1launchTime = Date.valueOf("2018-12-30");
@@ -58,11 +59,11 @@ public static boolean firstTest = true;
         firstToLast(vacationTableEntry, dateFirst, dateLast);
         itzikVacations(vacationTableEntry);
         System.out.println("**** Itzik 1 vacations update NOT avalible ****");
-        boolean itzik1 = vacationTableEntry.updateAvailable(2,0);
+        boolean itzik1 = vacationTableEntry.updateAvailable(2,1);
         if(itzik1) System.out.println("update itsik1 success!");
 
         System.out.println("**** Itzik 2 vacations update NOT avalible ****");
-        boolean itzik2 = vacationTableEntry.updateAvailable(3,0);
+        boolean itzik2 = vacationTableEntry.updateAvailable(3,1);
         if(itzik2) System.out.println("update itsik2 success!");
 
         System.out.println("**** Itzik 2 vacations update avalible ****");
