@@ -62,14 +62,15 @@ public class dbMessages extends AdbEntry {
     }
 
     public List<Message> getAllReceived(String userNameReceived){
-        String query = "SELECT messageID,isRead,messageType,userNameFrom,userNameTo,messageText FROM messages WHERE usernameTo=?";
+        String query = "SELECT messageID,isRead,messageType,userNameFrom," +
+                "userNameTo,messageText FROM messages WHERE usernameTo=?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1,userNameReceived);
             ResultSet rs = pstmt.executeQuery();
             List<Message> toReturn = new ArrayList<>();
             while (rs.next()){
-                Message message = Message.CreateMessage(rs.getInt("isRead"),rs.getString("messageText"),rs.getString("userNameFrom"),rs.getString("userNameTo"),rs.getInt("messageID"),rs.getString("messageType"));
+                Message message = Message.CreateMessage(rs.getInt(2),rs.getString(6),rs.getString(4),rs.getString(5),rs.getInt("messageID"),rs.getString(1));
                 if(message!=null)
                     toReturn.add(message);
             }
