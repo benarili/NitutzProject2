@@ -1,14 +1,9 @@
 package Vacation;
 
 
-import DataBase.TransactionTableEntry;
 import DataBase.VacationTableEntry;
-import User.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Vacation {
     private static int incrementID = 0;
@@ -16,10 +11,10 @@ public class Vacation {
     private String sellerName;
     private String aviationCompany;
 
-    private long departureTime;
-    private long launchTime;
-    private long backDepartureTime;
-    private long backLaunchTime;
+    private Date departureTime; //"YYYY-MM-DD HH:MM"
+    private Date launchTime;
+    private Date backDepartureTime;
+    private Date backLaunchTime;
 
     private int baggage;
     private int tickets;
@@ -30,8 +25,8 @@ public class Vacation {
 
     private boolean isAvalible;
 
-    public Vacation(String sellerName, String aviationCompany, long departureTime, long launchTime,
-                    long backDepartureTime, long backLaunchTime, int baggage, int tickets,
+    public Vacation(String sellerName, String aviationCompany, Date departureTime, Date launchTime,
+                    Date backDepartureTime, Date backLaunchTime, int baggage, int tickets,
                     String fromCountry, String destinationCountry, String ticketType, double price) {
         this.vacationID = ++incrementID;
         this.sellerName = sellerName;
@@ -50,10 +45,10 @@ public class Vacation {
 
         //add to dataBase
         VacationTableEntry vte = new VacationTableEntry();
-        vte.InsertComand(this);
+        vte.InsertCommand(this);
     }
-    public Vacation(int vacationID, String sellerName, String aviationCompany, long departureTime, long launchTime,
-                    long backDepartureTime, long backLaunchTime, int baggage, int tickets,
+    public Vacation(int vacationID, String sellerName, String aviationCompany, Date departureTime, Date launchTime,
+                    Date backDepartureTime, Date backLaunchTime, int baggage, int tickets,
                     String fromCountry, String destinationCountry, String ticketType, double price, int isAvalible){
         //create object from record in DB
         // NO NEED TO ADD TO DB!
@@ -63,8 +58,8 @@ public class Vacation {
         this.aviationCompany = aviationCompany;
         this.departureTime = departureTime;
         this.launchTime = launchTime;
-        this.backDepartureTime = backDepartureTime;
-        this.backLaunchTime = backLaunchTime;
+        if (backDepartureTime != null) this.backDepartureTime = backDepartureTime;
+        if (backLaunchTime != null) this.backLaunchTime = backLaunchTime;
         this.baggage = baggage;
         this.tickets = tickets;
         this.fromCountry = fromCountry;
@@ -74,6 +69,11 @@ public class Vacation {
         this.isAvalible = isAvalible != 0;
     }
 
+    /**
+     * constractor that create a Vacation that
+     * @param sellerUserName
+     * @param vacationID
+     */
     public Vacation(String sellerUserName, int vacationID) {
         VacationTableEntry vacationTableEntry = new VacationTableEntry();
         String querry = "SELECT * FROM vacations WHERE  seller = ? AND vacationID = ?;";
@@ -83,16 +83,18 @@ public class Vacation {
             pstmt.setInt(2,vacationID);
             //
             ResultSet rs  = pstmt.executeQuery();
-
+            if(rs.first()) {
+                System.out.println("Vacation ID: " + vacationID + " from seller: " + sellerUserName + " doesn't exist in DB");
+            }
             // loop through the result set
             while (rs.next()) {
                 this.vacationID= rs.getInt("vacationID");
                 this.sellerName=rs.getString("seller");
                 this.aviationCompany=rs.getString("aviationCompany");
-                this.departureTime=rs.getLong("departureTime");
-                this.launchTime=rs.getLong("launchTime");
-                this.backDepartureTime=rs.getLong("backDepartureTime");
-                this.backLaunchTime=rs.getLong("backLaunchTime");
+                this.departureTime=rs.getDate("departureTime");
+                this.launchTime=rs.getDate("launchTime");
+                if (backDepartureTime != null) this.backDepartureTime=rs.getDate("backDepartureTime");
+                if (backLaunchTime != null) this.backLaunchTime=rs.getDate("backLaunchTime");
                 this.baggage=rs.getInt("baggage");
                 this.tickets=rs.getInt("tickets");
                 this.fromCountry=rs.getString("fromCountry");
@@ -120,19 +122,19 @@ public class Vacation {
         return aviationCompany;
     }
 
-    public long getDepartureTime() {
+    public Date getDepartureTime() {
         return departureTime;
     }
 
-    public long getLaunchTime() {
+    public Date getLaunchTime() {
         return launchTime;
     }
 
-    public long getBackDepartureTime() {
+    public Date getBackDepartureTime() {
         return backDepartureTime;
     }
 
-    public long getBackLaunchTime() {
+    public Date getBackLaunchTime() {
         return backLaunchTime;
     }
 
@@ -175,11 +177,11 @@ public class Vacation {
         VacationTableEntry vacationTableEntry = new VacationTableEntry();
         int boolInt = 0;
         if(avalible) boolInt = 1;
-        vacationTableEntry.updateAvalible(getVacationID(),boolInt);
+        vacationTableEntry.updateAvailable(getVacationID(),boolInt);
     }
     @Override
     public String toString() {
-        return "seller: "+sellerName+"  country of origin: " + fromCountry+ "  country destination: "+destinationCountry+ "  price: " + price +"\ndepartureTime: " +departureTime
-                + "  launchTime: " + launchTime+ "  backDepartureTime: "+backDepartureTime+"  backLaunchTime: "+backLaunchTime ;
+        return "seller: "+sellerName+",  country of origin: " + fromCountry+ ",  country destination: "+destinationCountry+ ",  price: " + price +", departureTime: " +departureTime.toString()
+                + ",  launchTime: " + launchTime.toString()+ ",  backDepartureTime: "+backDepartureTime.toString()+",  backLaunchTime: "+backLaunchTime.toString() ;
     }
 }

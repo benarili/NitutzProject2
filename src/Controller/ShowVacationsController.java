@@ -3,15 +3,12 @@ package Controller;
 import Vacation.Vacation;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.*;
-import javafx.scene.paint.Paint.*;
 import DataBase.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import java.util.ArrayList;
-import javafx.scene.effect.ColorInput;
 
 public class ShowVacationsController {
     private Parent root;
@@ -34,7 +31,7 @@ public class ShowVacationsController {
 
     public void setVacations() {
         VacationTableEntry table = new VacationTableEntry();
-        ArrayList<Vacation> vacations = table.getAllAvalibleVacations();
+        ArrayList<Vacation> vacations = table.getAllAvailableVacations();
         for (Vacation v:vacations) {
             addVacation(v);
         }
