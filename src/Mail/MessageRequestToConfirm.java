@@ -96,7 +96,10 @@ public class MessageRequestToConfirm extends Message{
         this.haveResponded = vacationToConfirm.isAvalible() && haveResponded.equals("t");
     }
 
-
+    public boolean haveResponded(){
+        haveResponded = vacationToConfirm.isAvalible() && haveResponded;
+        return haveResponded;
+    }
 
     public String getTextToSave(){
         String vacation = vacationToConfirm.getSeller()+"\t"+vacationToConfirm.getVacationID();

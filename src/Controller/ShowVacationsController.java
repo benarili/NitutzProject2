@@ -1,5 +1,8 @@
 package Controller;
 
+import Mail.Mailbox;
+import Mail.Message;
+import Mail.MessageRequestToConfirm;
 import User.User;
 import Vacation.Vacation;
 import javafx.beans.value.ChangeListener;
@@ -153,7 +156,7 @@ public class ShowVacationsController {
     private void addVacation(Vacation v) {
         Label parameters=new Label( v.toString() );
         Button vacations = new Button("buy vacation");
-        vacations.setOnAction( e->payment(v.getSeller()) );
+        vacations.setOnAction( e->payment(v) );
         Button contact = new Button("contact seller");
         contact.setOnAction( e->contactSeller(v.getSeller()) );
         HBox hb= new HBox(  );
@@ -185,14 +188,16 @@ public class ShowVacationsController {
         }
     }
 
-    private void payment(String seller) {
+    private void payment(Vacation vacation) {
         if(user==null){
             Alert alert=new Alert( Alert.AlertType.WARNING );
             alert.setContentText( "you need to log in before purchase" );
             alert.showAndWait();
         }
         else{
-
+            Mailbox mailbox = Mailbox.recreateMailBox(user);
+            Message message = new MessageRequestToConfirm(vacation);
+            mailbox.sendMessage(message,vacation.getSeller());
         }
     }
 
