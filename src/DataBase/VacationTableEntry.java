@@ -148,7 +148,7 @@ public class VacationTableEntry extends AdbEntry {
     public ArrayList<Vacation> getAllAvailableVacations(String registeredUerName){
         ArrayList<Vacation>  res = new ArrayList<Vacation>();
         String sql;
-        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE seller !=  ? AND avalible = 1 ;";
+        sql = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE seller !=  ? AND avalible = 1 ";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1,registeredUerName);
