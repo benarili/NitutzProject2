@@ -8,10 +8,10 @@ import Vacation.Vacation;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,8 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import DataBase.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -30,7 +28,6 @@ import java.util.Collection;
 
 import javafx.geometry.Insets;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ScrollBar;
 import javafx.geometry.Orientation;
 import javax.swing.event.*;
 import javafx.beans.value.*;
@@ -44,6 +41,10 @@ public class ShowVacationsController {
     public javafx.scene.control.Button filter;
     public DatePicker departure_datePicker;
     public DatePicker launchBack_datePicker;
+    public TextField user_name;
+    public TextField pass;
+    public String userName="";
+    public String password="";
     private Group group=null;
     private int height=70;
     private User user;
@@ -59,27 +60,27 @@ public class ShowVacationsController {
         filter.setDisable(true);
         try{
             filt=true;
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/FilterByDate.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
-        ShowVacationsController svc=fxmlLoader.getController();
-        svc.setController(this);
-        Scene scene = new Scene( root1 );
-        Stage stage = new Stage();
-        stage.setScene( scene );
-        stage.initModality( Modality.APPLICATION_MODAL);
-        stage.initStyle( StageStyle.UNDECORATED);
-        stage.setTitle("filter vacations");
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent windowEvent) {
-                windowEvent.consume();
-                stage.close();
-            }
-        });
-        stage.show();
-    } catch (
-    IOException e) {
-        e.printStackTrace();
-    }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/FilterByDate.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            ShowVacationsController svc=fxmlLoader.getController();
+            svc.setController(this);
+            Scene scene = new Scene( root1 );
+            Stage stage = new Stage();
+            stage.setScene( scene );
+            stage.initModality( Modality.APPLICATION_MODAL);
+            stage.initStyle( StageStyle.UNDECORATED);
+            stage.setTitle("filter vacations");
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent windowEvent) {
+                    windowEvent.consume();
+                    stage.close();
+                }
+            });
+            stage.show();
+        } catch (
+                IOException e) {
+            e.printStackTrace();
+        }
         filter.setDisable(false);
     }
 
@@ -193,11 +194,34 @@ public class ShowVacationsController {
             Alert alert=new Alert( Alert.AlertType.WARNING );
             alert.setContentText( "you need to log in before purchase" );
             alert.showAndWait();
+
         }
         else{
-            Mailbox mailbox = Mailbox.recreateMailBox(user);
-            Message message = new MessageRequestToConfirm(vacation);
-            mailbox.sendMessage(message,vacation.getSeller());
+            try{
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/PayPal.fxml"));
+                Parent root1 = (Parent) fxmlLoader.load();
+                ShowVacationsController svc=fxmlLoader.getController();
+                svc.setController(this);
+                Scene scene = new Scene( root1 );
+                Stage stage = new Stage();
+                stage.setScene( scene );
+                stage.initModality( Modality.APPLICATION_MODAL);
+                stage.initStyle( StageStyle.UNDECORATED);
+                stage.setTitle("PayPal");
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    public void handle(WindowEvent windowEvent) {
+                        windowEvent.consume();
+                        stage.close();
+                    }
+                });
+                stage.show();
+            } catch (
+                    IOException e) {
+                e.printStackTrace();
+            }
+                Mailbox mailbox = Mailbox.recreateMailBox( user );
+                Message message = new MessageRequestToConfirm( vacation );
+                mailbox.sendMessage( message, vacation.getSeller() );
         }
     }
 
@@ -221,6 +245,20 @@ public class ShowVacationsController {
             VacationTableEntry db= new VacationTableEntry();
             ArrayList<Vacation> vac= db.selectByDatesWithBackFlights( Date.valueOf(departue),Date.valueOf(launchBack) );
             controller.setVacations( vac );
+        }
+    }
+
+    public void login(ActionEvent actionEvent) {
+        controller.userName =user_name.getText();
+        controller.password =pass.getText();
+        if(controller.userName.length()<1||controller.password.length()<1){
+            Alert alert=new Alert( Alert.AlertType.WARNING );
+            alert.setContentText( "Please enter username and password!" );
+            alert.showAndWait();
+        }
+        else{
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
         }
     }
 }

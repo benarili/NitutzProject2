@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -25,6 +26,8 @@ import java.util.Optional;
 
 import User.*;
 import Model.*;
+
+
 public class Controller implements Observer {
     public javafx.scene.control.Button closeButton;
     public boolean isConnected;
@@ -40,6 +43,7 @@ public class Controller implements Observer {
     private Stage primaryStage;
     private Parent root;
     private ModelInt myModel;
+    private ImageView image;
     public Controller(){
         createButtons();
     }
@@ -123,7 +127,7 @@ public class Controller implements Observer {
     private void logout() {
         isConnected=false;
         user=null;
-        Group group=new Group( root,register,login,showVacations );
+        Group group=new Group( image,root,register,login,showVacations );
         Scene scene = new Scene(group, 800, 700);
         scene.getStylesheets().add("/View/MyStyle.css");
         primaryStage.setScene(scene);
@@ -149,7 +153,7 @@ public class Controller implements Observer {
             Label label = new Label("Hello " + user.getName());
             label.setLayoutX(230);
             label.setLayoutY(20);
-            Group group=new Group( root,label,logout,showVacations,addVacation,myVacations,profile,mailbox );
+            Group group=new Group(image, root,label,logout,showVacations,addVacation,myVacations,profile,mailbox );
             Scene scene = new Scene(group, 800, 700);
             scene.getStylesheets().add("/View/MyStyle.css");
             primaryStage.setScene(scene);
@@ -248,7 +252,8 @@ public class Controller implements Observer {
         }
     }
 
-    public void setUIObjects(Button register, Button login, Parent root,Button vacations) {
+    public void setUIObjects(ImageView image,Button register, Button login, Parent root, Button vacations) {
+        this.image=image;
         this.register=register;
         this.login=login;
         this.root=root;
