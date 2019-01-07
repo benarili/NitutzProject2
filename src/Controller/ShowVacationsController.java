@@ -201,32 +201,11 @@ public class ShowVacationsController {
             alert.showAndWait();
 
         }
-        else{
-            try{
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/PayPal.fxml"));
-                Parent root1 = (Parent) fxmlLoader.load();
-                ShowVacationsController svc=fxmlLoader.getController();
-                svc.setMyModel( myModel );
-                svc.setController(this);
-                Scene scene = new Scene( root1 );
-                Stage stage = new Stage();
-                stage.setScene( scene );
-                stage.initModality( Modality.APPLICATION_MODAL);
-                stage.initStyle( StageStyle.UNDECORATED);
-                myModel.setVacation( vacation );
-                stage.setTitle("PayPal");
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    public void handle(WindowEvent windowEvent) {
-                        windowEvent.consume();
-                        stage.close();
-                    }
-                });
-                stage.show();
-            } catch (
-                    IOException e) {
-                e.printStackTrace();
-            }
+        else {
+            myModel.setVacation( vacation );
+            sendRequest();
         }
+
     }
 
     public void setStage(Stage stage, Parent root) {
@@ -252,20 +231,9 @@ public class ShowVacationsController {
         }
     }
 
-    public void login(ActionEvent actionEvent) {
-        controller.userName=user_name.getText();
-        controller.password=pass.getText();
-        if(controller.userName.length()<1||controller.password.length()<1){
-            Alert alert=new Alert( Alert.AlertType.WARNING );
-            alert.setContentText( "Please enter username and password!" );
-            alert.showAndWait();
-        }
-        else{
-            Stage stage = (Stage) closeButton.getScene().getWindow();
-            stage.close();
-            Mailbox mailbox = Mailbox.recreateMailBox( myModel.getUser() );
-            Message message = new MessageRequestToConfirm( myModel.getVacation() );
-            mailbox.sendMessage( message, myModel.getVacation().getSeller() );
-        }
+    public void sendRequest() {
+        Mailbox mailbox = Mailbox.recreateMailBox( myModel.getUser() );
+        Message message = new MessageRequestToConfirm( myModel.getVacation() );
+        mailbox.sendMessage( message, myModel.getVacation().getSeller() );
     }
 }
