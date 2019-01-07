@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class Message {
 
-    private boolean isRead;
+    protected boolean isRead;
     protected String text;
     private String userNameFrom;
     private String userNameTo;
@@ -20,8 +20,7 @@ public class Message {
         this.userNameFrom = from;
         this.userNameTo = to;
         dbMessages mdb = new dbMessages();
-        this.id = mdb.selectIntCommand("messageID");
-        mdb.updateInt("UPDATE ids SET vacationID = ?",id+1);
+        this.id = (Math.random()*Integer.MAX_VALUE+ "").hashCode();
     }
 
     Message(int id){
@@ -29,8 +28,7 @@ public class Message {
     }
     Message(){
         dbMessages mdb = new dbMessages();
-        this.id = mdb.selectIntCommand("messageID");
-        mdb.updateInt("UPDATE ids SET messageID = ?",id+1);
+        this.id = (Math.random()*Integer.MAX_VALUE+ "").hashCode();
     }
 
 
@@ -113,8 +111,9 @@ public class Message {
         boolean bIsRead = isRead==1 ? true : false;
         if(type.equals("chat"))
             return new Message(bIsRead,savedText,usernameFrom,usernameTo,id);
-        else if(type.equals("request_confirmation"))
-            return new MessageRequestToConfirm(bIsRead,savedText,usernameFrom,usernameTo,id);
+        else if(type.equals("request_confirmation")) {
+            return new MessageRequestToConfirm( bIsRead, savedText, usernameFrom, usernameTo, id );
+        }
         else if(type.equals("confirmation_message"))
             return new MessageConfirmedPurchase(bIsRead,savedText,usernameFrom,usernameTo,id);
         return null;

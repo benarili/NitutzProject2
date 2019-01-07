@@ -3,7 +3,7 @@ package Mail;
 import Transactions.Transaction;
 import User.*;
 import Vacation.Vacation;
-
+import DataBase.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public class MessageRequestToConfirm extends Message{
 
     Vacation vacationToConfirm;
-    boolean haveResponded;
+    public boolean haveResponded=false;
 
 
     MessageRequestToConfirm(boolean isRead, String savedText, String usernameFrom, String usernameTo, int id) {
@@ -44,14 +44,19 @@ public class MessageRequestToConfirm extends Message{
     }
 
     public void confirm(boolean action){
+        System.out.println("check");
+        isRead=true;
         haveResponded = true;
         MessageConfirmedPurchase.Type type;
+        dbMessages db=new dbMessages();
+        db.updateInDataBase( this );
         if (action==true){
             type = accept();
         }
         else {
             type = MessageConfirmedPurchase.Type.USERREGECTED;
         }
+
         Mailbox sellerMailBox = Mailbox.recreateMailBox(getFromUser());
         Mailbox buyerMailBox = Mailbox.recreateMailBox(getTo());
         Message message = new MessageConfirmedPurchase(vacationToConfirm,type,getUserNameFrom());

@@ -1,6 +1,6 @@
 package Test;
 
-import DataBase.VacationTableEntry;
+import DataBase.VacationTable;
 import Vacation.Vacation;
 
 import java.sql.Date;
@@ -10,7 +10,7 @@ public class VacationTest {
 public static boolean firstTest = true;
 //"YYYY-MM-DD HH:MM"
     public static void main(String[] args) {
-        VacationTableEntry vacationTableEntry = new VacationTableEntry();
+        VacationTable vacationTableEntry = new VacationTable();
         if(firstTest) firstTest=false;
         else {
             vacationTableEntry.deletCommand(1);
@@ -78,7 +78,7 @@ public static boolean firstTest = true;
         printAllAvalibleVacationsWithoutRegisteredUser(vacationTableEntry);
     }
 
-    private static void itzikVacations(VacationTableEntry vacationTableEntry) {
+    private static void itzikVacations(VacationTable vacationTableEntry) {
         System.out.println();
         System.out.println("**** Itzik vacations ****");
         ArrayList<Vacation> zinaVacations = vacationTableEntry.getMyVacations("Itzik");
@@ -88,7 +88,7 @@ public static boolean firstTest = true;
         }
     }
 
-    private static void firstToLast(VacationTableEntry vacationTableEntry, Date dateFirst, Date dateLast) {
+    private static void firstToLast(VacationTable vacationTableEntry, Date dateFirst, Date dateLast) {
         System.out.println();
         System.out.println("**** vacations First To Last ****");
         ArrayList<Vacation> vacationsFirstToLast = vacationTableEntry.selectByDatesWithBackFlights(dateFirst,dateLast);
@@ -98,7 +98,7 @@ public static boolean firstTest = true;
         }
     }
 
-    private static void middleToLast(VacationTableEntry vacationTableEntry, Date dateMiddle, Date dateLast) {
+    private static void middleToLast(VacationTable vacationTableEntry, Date dateMiddle, Date dateLast) {
         System.out.println("**** vacations Middle To Last ****");
         ArrayList<Vacation> vacationsMiddleToLast = vacationTableEntry.selectByDatesWithBackFlights(dateMiddle,dateLast);
         if (vacationsMiddleToLast.size() != 0){
@@ -107,7 +107,7 @@ public static boolean firstTest = true;
         }
     }
 
-    private static void firstToMiddle(VacationTableEntry vacationTableEntry, Date dateFirst, Date dateMiddle) {
+    private static void firstToMiddle(VacationTable vacationTableEntry, Date dateFirst, Date dateMiddle) {
         System.out.println();
         System.out.println("**** vacations First To Middle ****");
         ArrayList<Vacation> vacationsFirstToMiddle = vacationTableEntry.selectByDatesWithBackFlights(dateFirst,dateMiddle);
@@ -116,7 +116,7 @@ public static boolean firstTest = true;
                 System.out.println(v.toString());
         }
     }
-    private static void printAllAvalibleVacations(VacationTableEntry vacationTableEntry) {
+    private static void printAllAvalibleVacations(VacationTable vacationTableEntry) {
         System.out.println();
         System.out.println("**** print All Avalible Vacations ****");
         ArrayList<Vacation> allAvalibleVacations = vacationTableEntry.getAllAvailableVacations();
@@ -125,7 +125,7 @@ public static boolean firstTest = true;
                 System.out.println(v.toString());
         }
     }
-    private static void printAllAvalibleVacationsWithoutRegisteredUser(VacationTableEntry vacationTableEntry) {
+    private static void printAllAvalibleVacationsWithoutRegisteredUser(VacationTable vacationTableEntry) {
         System.out.println();
         System.out.println("**** print All Avalible Vacations Without Registered User ****");
         String registeredUser = "Liad";

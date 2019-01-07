@@ -3,24 +3,21 @@ package Controller;
 import Mail.Mailbox;
 import Mail.Message;
 import Mail.MessageRequestToConfirm;
+import Model.ModelInt;
 import User.User;
 import Vacation.Vacation;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.*;
 import DataBase.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -30,9 +27,7 @@ import java.util.Collection;
 
 import javafx.geometry.Insets;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ScrollBar;
 import javafx.geometry.Orientation;
-import javax.swing.event.*;
 import javafx.beans.value.*;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -44,11 +39,23 @@ public class ShowVacationsController {
     public javafx.scene.control.Button filter;
     public DatePicker departure_datePicker;
     public DatePicker launchBack_datePicker;
+    @FXML
+    private TextField user_name;
+    @FXML
+    private TextField pass;
+    public String userName="";
+    public String password="";
     private Group group=null;
     private int height=70;
     private User user;
     private ShowVacationsController controller;
     private boolean filt;
+
+    public void setMyModel(ModelInt myModel) {
+        this.myModel = myModel;
+    }
+
+    private ModelInt myModel;
 
     public Stage getStage() {
         return stage;
@@ -110,7 +117,6 @@ public class ShowVacationsController {
             group = null;
         }
         for (Vacation v:vacations) {
-            System.out.println(v);
             addVacation(v);
         }
         ScrollBar sc = new ScrollBar();
@@ -144,7 +150,7 @@ public class ShowVacationsController {
 
     }
     public void setVacations() {
-        VacationTableEntry table = new VacationTableEntry();
+        VacationTable table = new VacationTable();
         ArrayList<Vacation> vacations=null;
         if(user==null)
             vacations = table.getAllAvailableVacations();
@@ -157,7 +163,7 @@ public class ShowVacationsController {
         Label parameters=new Label( v.toString() );
         Button vacations = new Button("buy vacation");
         vacations.setOnAction( e->payment(v) );
-        Button contact = new Button("contact seller");
+        Button contact = new Button("trade vacation");
         contact.setOnAction( e->contactSeller(v.getSeller()) );
         HBox hb= new HBox(  );
         hb.setSpacing( 10 );
@@ -181,7 +187,7 @@ public class ShowVacationsController {
     }
 
     private void contactSeller(String seller) {
-        if(user==null){
+        if(myModel.getUser()==null){
             Alert alert=new Alert( Alert.AlertType.WARNING );
             alert.setContentText( "you need to log in before contact seller" );
             alert.showAndWait();
@@ -189,15 +195,37 @@ public class ShowVacationsController {
     }
 
     private void payment(Vacation vacation) {
-        if(user==null){
+        if(myModel.getUser()==null){
             Alert alert=new Alert( Alert.AlertType.WARNING );
             alert.setContentText( "you need to log in before purchase" );
             alert.showAndWait();
+
         }
         else{
-            Mailbox mailbox = Mailbox.recreateMailBox(user);
-            Message message = new MessageRequestToConfirm(vacation);
-            mailbox.sendMessage(message,vacation.getSeller());
+            try{
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/PayPal.fxml"));
+                Parent root1 = (Parent) fxmlLoader.load();
+                ShowVacationsController svc=fxmlLoader.getController();
+                svc.setMyModel( myModel );
+                svc.setController(this);
+                Scene scene = new Scene( root1 );
+                Stage stage = new Stage();
+                stage.setScene( scene );
+                stage.initModality( Modality.APPLICATION_MODAL);
+                stage.initStyle( StageStyle.UNDECORATED);
+                myModel.setVacation( vacation );
+                stage.setTitle("PayPal");
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    public void handle(WindowEvent windowEvent) {
+                        windowEvent.consume();
+                        stage.close();
+                    }
+                });
+                stage.show();
+            } catch (
+                    IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -218,9 +246,26 @@ public class ShowVacationsController {
             launchBack=launchBack_datePicker.getValue().format( DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
-            VacationTableEntry db= new VacationTableEntry();
+            VacationTable db= new VacationTable();
             ArrayList<Vacation> vac= db.selectByDatesWithBackFlights( Date.valueOf(departue),Date.valueOf(launchBack) );
             controller.setVacations( vac );
+        }
+    }
+
+    public void login(ActionEvent actionEvent) {
+        controller.userName=user_name.getText();
+        controller.password=pass.getText();
+        if(controller.userName.length()<1||controller.password.length()<1){
+            Alert alert=new Alert( Alert.AlertType.WARNING );
+            alert.setContentText( "Please enter username and password!" );
+            alert.showAndWait();
+        }
+        else{
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
+            Mailbox mailbox = Mailbox.recreateMailBox( myModel.getUser() );
+            Message message = new MessageRequestToConfirm( myModel.getVacation() );
+            mailbox.sendMessage( message, myModel.getVacation().getSeller() );
         }
     }
 }

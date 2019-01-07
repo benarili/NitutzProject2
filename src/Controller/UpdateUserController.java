@@ -151,6 +151,5 @@ public class UpdateUserController {
                 result.showAndWait();
             }
         }
-
     }
 }

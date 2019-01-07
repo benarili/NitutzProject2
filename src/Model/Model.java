@@ -2,6 +2,7 @@ package Model;
 
 import Controller.Controller;
 import User.User;
+import Vacation.Vacation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -10,7 +11,8 @@ import java.util.Observer;
 
 public class Model extends Observable implements ModelInt {
     Controller controller;
-
+    private User user;
+    private Vacation vacationToBuy;
     public void setController(Controller controller) {
         this.controller = controller;
     }
@@ -32,6 +34,27 @@ public class Model extends Observable implements ModelInt {
     }
 
     @Override
+    public User getUser() {
+        return this.user;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user=user;
+    }
+
+    @Override
+    public Vacation getVacation() {
+        return vacationToBuy;
+    }
+
+    @Override
+    public void setVacation(Vacation v) {
+        vacationToBuy=v;
+
+    }
+
+    @Override
     public User login(String userName, String password) {
         User user=new User(userName,password);
         return user;
@@ -40,7 +63,7 @@ public class Model extends Observable implements ModelInt {
     @Override
     public void loginSucces(User user) {
         controller.isConnected=true;
-        controller.user=user;
+        this.user=user;
         setChanged();
         notifyObservers();
     }

@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Transaction {
 
@@ -52,7 +51,7 @@ public class Transaction {
 
     public void addToDataBase(){
         if(!isInDB) {
-            TransactionTableEntry tb = new TransactionTableEntry();
+            TransactionTable tb = new TransactionTable();
             tb.insert(this);
             isInDB = true;
         }
@@ -60,14 +59,14 @@ public class Transaction {
 
     public void removeFromDataBase(){
         if(isInDB){
-            TransactionTableEntry tb = new TransactionTableEntry();
+            TransactionTable tb = new TransactionTable();
             tb.cancelTransaction(this);
             isInDB = false;
         }
     }
 
     public Transaction(String buyerUserName,String sellerUserName, int vacationID){
-        TransactionTableEntry transactionTableEntry = new TransactionTableEntry();
+        TransactionTable transactionTableEntry = new TransactionTable();
         String querry = "SELECT buyerUserName,sellerUserName,vacationID,time FROM transactions WHERE buyerUserName=? AND sellerUserName=? AND vacationID=?";
         try (Connection conn = transactionTableEntry.connect();
              PreparedStatement pstmt  = conn.prepareStatement(querry)){

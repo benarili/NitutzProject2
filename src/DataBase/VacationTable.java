@@ -4,9 +4,8 @@ import Vacation.Vacation;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 
-public class VacationTableEntry extends AdbEntry {
+public class VacationTable extends Adb {
 
     public ArrayList<Vacation> selectByDatesWithBackFlights(Date departureTime, Date backLaunchTime) {
         ArrayList<Vacation> vacationsArrayList = new ArrayList<>();

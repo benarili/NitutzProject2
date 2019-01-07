@@ -7,13 +7,15 @@ import User.User;
 import Vacation.Vacation;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,8 +46,7 @@ public class MailboxController {
         this.userName = userName;
     }
 
-    public void closeButtonAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
+    public void closeButtonAction() {
         stage.close();
     }
     public void setMessages(){
@@ -60,15 +61,33 @@ public class MailboxController {
         }
         Scene scene;
         if(group!=null) {
-            group = new Group(p, group);
-            scene = new Scene(group);
+            ScrollPane sp= new ScrollPane(  );
+            Button exit=getExitButton();
+            group=new Group( group,exit );
+            group.getStylesheets().add("/View/MyStyle.css");
+            sp.setContent(group);
+            sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+            scene = new Scene(sp,1000,800);
+
         }
         else {
-            group=new Group(p);
-            scene = new Scene(group);
+            ScrollPane sp= new ScrollPane(  );
+            Button exit=getExitButton();
+            group=new Group(exit);
+            group.getStylesheets().add("/View/MyStyle.css");
+            sp.setContent( group );
+            sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+            scene = new Scene(sp);
         }
         stage.setScene( scene );
     }
+
+    private Button getExitButton() {
+        Button Exit = new Button( "exit" );
+        Exit.setOnAction( e->closeButtonAction() );
+        return Exit;
+    }
+
     public void setParent(Parent p){
         this.p=p;
     }
@@ -78,6 +97,7 @@ public class MailboxController {
         javafx.scene.control.Button deny = new Button("Deny Purchase");
         accept.setOnAction(e->handlePress(true, (MessageRequestToConfirm) m));
         deny.setOnAction(e->handlePress(false, (MessageRequestToConfirm) m));
+        /*
         parameters.setLayoutX(40);
         parameters.setLayoutY( height );
         parameters.setPrefWidth( 1000 );
@@ -87,19 +107,28 @@ public class MailboxController {
         deny.setLayoutX( 200 );
         deny.setLayoutY( height );
         height+=60;
-        HBox hb;
-        if(m instanceof MessageRequestToConfirm && (((MessageRequestToConfirm) m).haveResponded())){
+        */
+        HBox hb=null;
+        if(m instanceof MessageRequestToConfirm&&!m.isRead() ){
             hb= new HBox( parameters,accept,deny );
         }
-        else {
+        else if(!(m instanceof MessageRequestToConfirm)) {
             hb= new HBox( parameters);
         }
-        if(group==null){
-            group=new Group( hb );
+        if(hb!=null) {
+            hb.setSpacing( 10 );
+            hb.setMargin( parameters, new javafx.geometry.Insets( 20, 20, 20, 20 ) );
+            hb.setMargin( accept, new javafx.geometry.Insets( 0, 0, 0, 0 ) );
+            hb.setMargin( deny, new Insets( 0, 0, 0, 0 ) );
+            hb.setLayoutX( 40 );
+            hb.setLayoutY( height );
+            hb.setPrefWidth( 900 );
+            height += 120;
+            if (group == null) {
+                group = new Group( hb );
+            } else
+                group = new Group( group, hb );
         }
-        else
-            group=new Group( group,hb );
-        group.getStylesheets().add("/View/MyStyle.css");
     }
 
     private void handlePress(boolean b, MessageRequestToConfirm m) {

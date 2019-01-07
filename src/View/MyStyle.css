@@ -1,7 +1,6 @@
 BorderPane{
 }
 Button{
-    -fx-background-color: white;
     -fx-border-color: lightblue;
     -fx-border-style: solid;
     -fx-font-size: 20px;

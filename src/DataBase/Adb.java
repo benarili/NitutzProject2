@@ -3,7 +3,7 @@ package DataBase;
 import java.sql.*;
 import java.util.ArrayList;
 
-public abstract class AdbEntry {
+public abstract class Adb {
     public Connection connect() {
         // SQLite connection string
         Connection conn = null;

@@ -1,9 +1,11 @@
 package Model;
 
 import User.User;
+import Vacation.Vacation;
 import javafx.scene.control.Alert;
 
 public interface ModelInt {
+    User user=null;
     Alert getExitMessage();
 
     /**
@@ -17,7 +19,10 @@ public interface ModelInt {
      * @return true if user created
      */
     boolean createUser(String userName, String password, String email, String date, String firstName, String lastName);
-
+    User getUser();
+    void setUser(User user);
+    Vacation getVacation();
+    void setVacation(Vacation v);
     /**
      * login to a user with username and password
      */

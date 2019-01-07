@@ -12,7 +12,7 @@ public class DataBase implements IRelationalDB {
 
     private static DataBase instance;
 
-    public void insert(AdbEntry entry){
+    public void insert(Adb entry){
     }
     public static DataBase getInstance(){
         if (instance==null)

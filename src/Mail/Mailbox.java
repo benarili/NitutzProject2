@@ -6,6 +6,7 @@ import User.*;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Mailbox {
@@ -42,17 +43,23 @@ public class Mailbox {
     public static Mailbox recreateMailBox (User user){
         Mailbox mailbox = new Mailbox(user);
         dbMessages db = new dbMessages();
-        mailbox.messages=db.getAllReceived(user.getUsername());
-        for (Message m :mailbox.messages){
-            if(m instanceof MessageRequestToConfirm && !((MessageRequestToConfirm) m).haveResponded){
-                mailbox.messages.remove(m);
-            }
-        }
+        mailbox.setMessages(db.getAllReceived(user.getUsername()));
         return mailbox;
+    }
+
+    public void setMessages(List<Message> allReceived) {
+        for (Message m:allReceived
+             ) {
+            this.messages.add( m );
+        }
     }
 
     public String getOwnerUserName(){return owner;}
 
+    @Override
+    public String toString() {
+        return this.owner;
+    }
 
     void removeMessage(Message message){
         messages.remove(message);

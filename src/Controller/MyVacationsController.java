@@ -1,6 +1,6 @@
 package Controller;
 
-import DataBase.VacationTableEntry;
+import DataBase.VacationTable;
 import Vacation.Vacation;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -68,7 +68,7 @@ public class MyVacationsController {
 
     }
     public void setVacations(String username) {
-        VacationTableEntry table = new VacationTableEntry();
+        VacationTable table = new VacationTable();
         ArrayList<Vacation> vacations = table.getMyVacations( username );
         setVacations(vacations);
     }

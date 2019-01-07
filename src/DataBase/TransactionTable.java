@@ -3,7 +3,6 @@ package DataBase;
 import Transactions.Transaction;
 import User.User;
 import Vacation.Vacation;
-import javafx.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,14 +12,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TransactionTableEntry extends AdbEntry {
+public class TransactionTable extends Adb {
 
     private String buyerUserName;
     private String sellerUserName;
     private int vacationID;
     private long time;
     private String insertCommand = "INSERT INTO transactions(buyerUserName,sellerUserName,vacationID,time) VALUES(?,?,?,?)";
-    public TransactionTableEntry(Transaction transaction){
+    public TransactionTable(Transaction transaction){
         buyerUserName = transaction.getBuyer().getUsername();
         sellerUserName = transaction.getSeller().getUsername();
         vacationID = transaction.getVacation().getVacationID();
@@ -46,7 +45,7 @@ public class TransactionTableEntry extends AdbEntry {
         }
         return false;
     }
-    public TransactionTableEntry(){
+    public TransactionTable(){
 
     }
     public List<Transaction> getAllTransactions(User user){

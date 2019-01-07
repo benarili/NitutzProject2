@@ -61,7 +61,8 @@ public class MessageConfirmedPurchase extends Message{
         buyer = (savedTextSplit.remove(0));
         String vacationKeys = savedTextSplit.remove(0);
         String[] vacationKeysSplit = vacationKeys.split("\t");
-        vacation = new Vacation(vacationKeysSplit[0],Integer.parseInt(vacationKeysSplit[1]));
+        if(vacationKeysSplit.length>=2)
+            vacation = new Vacation(vacationKeysSplit[0],Integer.parseInt(vacationKeysSplit[1]));
         String text = "";
         for (int i = 0; i < savedTextSplit.size(); i++) {
             text+=savedTextSplit.get(i);

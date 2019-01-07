@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -25,10 +26,11 @@ import java.util.Optional;
 
 import User.*;
 import Model.*;
+
+
 public class Controller implements Observer {
     public javafx.scene.control.Button closeButton;
     public boolean isConnected;
-    public User user;
     private Button logout;
     private Button myVacations;
     private Button addVacation;
@@ -40,6 +42,7 @@ public class Controller implements Observer {
     private Stage primaryStage;
     private Parent root;
     private ModelInt myModel;
+    private ImageView image;
     public Controller(){
         createButtons();
     }
@@ -82,7 +85,7 @@ public class Controller implements Observer {
             stage.initStyle( StageStyle.UNDECORATED);
             stage.setTitle("my vacations");
             vacationsController.setStage(stage,root1);
-            vacationsController.setVacations(user.getUsername());
+            vacationsController.setVacations(myModel.getUser().getUsername());
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent windowEvent) {
                     windowEvent.consume();
@@ -105,7 +108,7 @@ public class Controller implements Observer {
             stage.initStyle( StageStyle.UNDECORATED);
             stage.setTitle("Add vacation");
             AddVacationController view = fxmlLoader.getController();
-            view.setUser( user );
+            view.setUser( myModel.getUser( ));
             //view.setModel(myModel);
             stage.setScene(new Scene(root1));
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -122,8 +125,8 @@ public class Controller implements Observer {
 
     private void logout() {
         isConnected=false;
-        user=null;
-        Group group=new Group( root,register,login,showVacations );
+        myModel.setUser(null);
+        Group group=new Group( image,root,register,login,showVacations );
         Scene scene = new Scene(group, 800, 700);
         scene.getStylesheets().add("/View/MyStyle.css");
         primaryStage.setScene(scene);
@@ -146,10 +149,10 @@ public class Controller implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(isConnected){
-            Label label = new Label("Hello " + user.getName());
+            Label label = new Label("Hello " + myModel.getUser().getName());
             label.setLayoutX(230);
             label.setLayoutY(20);
-            Group group=new Group( root,label,logout,showVacations,addVacation,myVacations,profile,mailbox );
+            Group group=new Group(image, root,label,logout,showVacations,addVacation,myVacations,profile,mailbox );
             Scene scene = new Scene(group, 800, 700);
             scene.getStylesheets().add("/View/MyStyle.css");
             primaryStage.setScene(scene);
@@ -205,7 +208,7 @@ public class Controller implements Observer {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/UpdateUser.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             UpdateUserController update=fxmlLoader.getController();
-            update.setText( user );
+            update.setText( myModel.getUser( ));
             update.setModel( myModel );
             Stage stage = new Stage();
             stage.initModality( Modality.APPLICATION_MODAL);
@@ -229,7 +232,8 @@ public class Controller implements Observer {
             Parent root1 = (Parent) fxmlLoader.load();
             ShowVacationsController vacationsController=fxmlLoader.getController();
             if(isConnected)
-                vacationsController.setUser(user);
+                vacationsController.setUser(myModel.getUser());
+            vacationsController.setMyModel( myModel );
             Stage stage = new Stage();
             stage.initModality( Modality.APPLICATION_MODAL);
             stage.initStyle( StageStyle.UNDECORATED);
@@ -248,7 +252,8 @@ public class Controller implements Observer {
         }
     }
 
-    public void setUIObjects(Button register, Button login, Parent root,Button vacations) {
+    public void setUIObjects(ImageView image,Button register, Button login, Parent root, Button vacations) {
+        this.image=image;
         this.register=register;
         this.login=login;
         this.root=root;
@@ -278,11 +283,11 @@ public class Controller implements Observer {
 
     public void getMailBox() {
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/MailBox.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            MailboxController mbc=fxmlLoader.getController();
-            mbc.setParent(root1);
-            mbc.setUserName(user.getUsername());
+            //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/View/MailBox.fxml"));
+            //Parent root1 = (Parent) fxmlLoader.load();
+            MailboxController mbc=new MailboxController();
+            //mbc.setParent(root1);
+            mbc.setUserName(myModel.getUser().getUsername());
             Stage stage = new Stage();
             mbc.setStage(stage);
             stage.initModality( Modality.APPLICATION_MODAL);
@@ -296,7 +301,7 @@ public class Controller implements Observer {
                 }
             });
             stage.show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

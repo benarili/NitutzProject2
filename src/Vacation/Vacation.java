@@ -1,7 +1,7 @@
 package Vacation;
 
 
-import DataBase.VacationTableEntry;
+import DataBase.VacationTable;
 
 import java.sql.*;
 
@@ -27,8 +27,8 @@ public class Vacation implements Comparable<Vacation> {
     public Vacation(String sellerName, String aviationCompany, Date departureTime, Date launchTime,
                     Date backDepartureTime, Date backLaunchTime, int baggage, int tickets,
                     String fromCountry, String destinationCountry, String ticketType, double price) {
-        VacationTableEntry vte = new VacationTableEntry();
-        this.vacationID = vte.selectIntCommand("vacationID");
+        VacationTable vte = new VacationTable();
+        this.vacationID = (Math.random()*Integer.MAX_VALUE+ "").hashCode();
         vte.updateInt("UPDATE ids SET vacationID = ?",vacationID+1);
         this.sellerName = sellerName;
         this.aviationCompany = aviationCompany;
@@ -75,7 +75,7 @@ public class Vacation implements Comparable<Vacation> {
      * @param vacationID
      */
     public Vacation(String sellerUserName, int vacationID) {
-        VacationTableEntry vacationTableEntry = new VacationTableEntry();
+        VacationTable vacationTableEntry = new VacationTable();
         String querry = "SELECT vacationID,seller,aviationCompany,departureTime,launchTime,backDepartureTime,backLaunchTime,baggage,tickets,fromCountry,destinationCountry,ticketType,price,avalible FROM vacations WHERE  seller = ? AND vacationID = ?;";
         try (Connection conn = vacationTableEntry.connect();
              PreparedStatement pstmt  = conn.prepareStatement(querry)){
@@ -172,7 +172,7 @@ public class Vacation implements Comparable<Vacation> {
     public void setAvalible(boolean avalible) {
         isAvalible = avalible;
         //UPDATE IN DB!!!!
-        VacationTableEntry vacationTableEntry = new VacationTableEntry();
+        VacationTable vacationTableEntry = new VacationTable();
         int boolInt = 0;
         if(avalible) boolInt = 1;
         vacationTableEntry.updateAvailable(getVacationID(),boolInt);
